@@ -1,0 +1,2 @@
+# oratio
+Zamów intencję mszy!

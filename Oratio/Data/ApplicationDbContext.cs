@@ -6,7 +6,6 @@ namespace Oratio.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<ExampleDatabaseModel> Models { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

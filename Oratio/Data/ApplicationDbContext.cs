@@ -13,5 +13,17 @@ namespace Oratio.Data
             : base(options)
         {
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Parish>()
+                .HasData(
+                    new Parish
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "Fejk",
+                        Dedicated = "Żadna"
+                    }
+                );
+        }
     }
 }

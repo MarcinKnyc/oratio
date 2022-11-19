@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Oratio.Data;
 
@@ -11,9 +12,10 @@ using Oratio.Data;
 namespace Oratio.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221107223254_Add-Seed-Parish")]
+    partial class AddSeedParish
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,7 +97,7 @@ namespace Oratio.Migrations.ApplicationDb
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0d49723c-13a4-4b43-ad29-e4a055169742"),
+                            Id = new Guid("da776626-be3c-48fd-91c2-ae4042970a46"),
                             Dedicated = "Żadna",
                             Name = "Fejk"
                         });
@@ -125,7 +127,8 @@ namespace Oratio.Migrations.ApplicationDb
 
             modelBuilder.Entity("Oratio.Models.Church", b =>
                 {
-                    b.Navigation("Address");
+                    b.Navigation("Address")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Oratio.Models.Parish", b =>

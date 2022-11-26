@@ -1,8 +1,7 @@
 ﻿namespace Oratio.Models
 {
-    public class Address
+    public class Address: Entity
     {
-        public Guid Id { get; set; }
         public String StreetName { get; set; } = "";
         public int StreetNumber { get; set; }
         public String City { get; set; } = "";

@@ -1,0 +1,2 @@
+﻿Intentions/Create.cshtml
+Controller/Generated/IntentionsController.cs

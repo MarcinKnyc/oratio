@@ -59,10 +59,6 @@ namespace Oratio.Controllers.Generated
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Confirm(Guid id)
         {
-            if (_context.Intentions == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Intentions' is null.");
-            }
             var intention = await _context.Intentions.FindAsync(id);
 
             if (intention != null)

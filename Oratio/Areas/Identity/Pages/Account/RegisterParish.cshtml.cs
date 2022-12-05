@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Oratio.Areas.Identity.Data;
+using Oratio.Data;
+using Oratio.Models;
 
 namespace Oratio.Areas.Identity.Pages.Account
 {
@@ -30,12 +32,14 @@ namespace Oratio.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<OratioUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private ApplicationDbContext _applicationDbContext;
 
         public RegisterParishModel(
             UserManager<OratioUser> userManager,
             IUserStore<OratioUser> userStore,
             SignInManager<OratioUser> signInManager,
             ILogger<RegisterModel> logger,
+            ApplicationDbContext applicationDbContext,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -44,6 +48,7 @@ namespace Oratio.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _applicationDbContext = applicationDbContext;
         }
 
         /// <summary>
@@ -125,6 +130,14 @@ namespace Oratio.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    Parish parish = new Parish();
+                    parish.OwnerId = new Guid(user.Id);
+                    parish.Dedicated = "Please fill in parish details";
+                    parish.Name = "Please fill in parish details";
+
+                    _applicationDbContext.Parishes.Add(parish);
+                    _applicationDbContext.SaveChanges();
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

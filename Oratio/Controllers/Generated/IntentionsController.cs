@@ -54,7 +54,7 @@ namespace Oratio.Controllers.Generated
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AskedIntention,Offering,isPaid,Id,OwnerId")] Intention intention)
+        public async Task<IActionResult> Create([Bind("AskedIntention,Offering,isPaid,isApproved,Id,OwnerId")] Intention intention)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace Oratio.Controllers.Generated
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("AskedIntention,Offering,isPaid,Id,OwnerId")] Intention intention)
+        public async Task<IActionResult> Edit(Guid id, [Bind("AskedIntention,Offering,isPaid,isApproved,Id,OwnerId")] Intention intention)
         {
             if (id != intention.Id)
             {

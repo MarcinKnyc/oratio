@@ -23,6 +23,9 @@
                 @Html.DisplayNameFor(model => model.isPaid)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.isApproved)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.OwnerId)
             </th>
             <th></th>
@@ -39,6 +42,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.isPaid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isApproved)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OwnerId)

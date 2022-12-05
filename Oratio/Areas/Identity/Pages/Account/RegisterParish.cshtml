@@ -1,7 +1,7 @@
 ﻿@page
-@model RegisterModel
+@model RegisterParishModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Register parish";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -32,9 +32,9 @@
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/RegisterParish">Are you a parish administrator? Register here!</a>
     </div>
-    <div class="col-md-6 col-md-offset-2" />
+    <div class="col-md-6 col-md-offset-2">
+    </div>
 </div>
 
 @section Scripts {

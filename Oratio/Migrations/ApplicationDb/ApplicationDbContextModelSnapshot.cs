@@ -22,70 +22,6 @@ namespace Oratio.Migrations.ApplicationDb
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Oratio.Areas.Identity.Data.OratioUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsAdministrator")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsFaithful")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsModerator")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OratioUser");
-                });
-
             modelBuilder.Entity("Oratio.Models.Address", b =>
                 {
                     b.Property<Guid>("Id")
@@ -98,9 +34,6 @@ namespace Oratio.Migrations.ApplicationDb
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("StreetName")
                         .IsRequired()
@@ -118,9 +51,7 @@ namespace Oratio.Migrations.ApplicationDb
                     b.HasIndex("ChurchId")
                         .IsUnique();
 
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("Oratio.Models.Church", b =>
@@ -133,78 +64,14 @@ namespace Oratio.Migrations.ApplicationDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<Guid>("ParishId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
-
                     b.HasIndex("ParishId");
 
-                    b.ToTable("Churches");
-                });
-
-            modelBuilder.Entity("Oratio.Models.Intention", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AskedIntention")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("MassId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<float?>("Offering")
-                        .HasColumnType("real");
-
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("isApproved")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("isPaid")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MassId");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Intention");
-                });
-
-            modelBuilder.Entity("Oratio.Models.Mass", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ChurchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("OwnerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChurchId");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Mass");
+                    b.ToTable("Churches", (string)null);
                 });
 
             modelBuilder.Entity("Oratio.Models.Parish", b =>
@@ -217,26 +84,18 @@ namespace Oratio.Migrations.ApplicationDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float?>("MinimumOffering")
-                        .HasColumnType("real");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Parishes");
+                    b.ToTable("Parishes", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("12322f45-af01-4783-8b22-ebf75d03ddfc"),
+                            Id = new Guid("0d49723c-13a4-4b43-ad29-e4a055169742"),
                             Dedicated = "Żadna",
                             Name = "Fejk"
                         });
@@ -250,75 +109,18 @@ namespace Oratio.Migrations.ApplicationDb
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Oratio.Areas.Identity.Data.OratioUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-
                     b.Navigation("Church");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Oratio.Models.Church", b =>
                 {
-                    b.HasOne("Oratio.Areas.Identity.Data.OratioUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-
                     b.HasOne("Oratio.Models.Parish", "Parish")
                         .WithMany("Churches")
                         .HasForeignKey("ParishId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Owner");
-
                     b.Navigation("Parish");
-                });
-
-            modelBuilder.Entity("Oratio.Models.Intention", b =>
-                {
-                    b.HasOne("Oratio.Models.Mass", "Mass")
-                        .WithMany()
-                        .HasForeignKey("MassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Oratio.Areas.Identity.Data.OratioUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-
-                    b.Navigation("Mass");
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("Oratio.Models.Mass", b =>
-                {
-                    b.HasOne("Oratio.Models.Church", "Church")
-                        .WithMany()
-                        .HasForeignKey("ChurchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Oratio.Areas.Identity.Data.OratioUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Church");
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("Oratio.Models.Parish", b =>
-                {
-                    b.HasOne("Oratio.Areas.Identity.Data.OratioUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Oratio.Models.Church", b =>

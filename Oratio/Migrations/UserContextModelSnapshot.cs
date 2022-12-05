@@ -178,18 +178,6 @@ namespace Oratio.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsAdministrator")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsFaithful")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsModerator")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 

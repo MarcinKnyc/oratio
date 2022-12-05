@@ -10,91 +10,86 @@ using Oratio.Models;
 
 namespace Oratio.Controllers.Generated
 {
-    public class AddressesController : Controller
+    public class MassesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public AddressesController(ApplicationDbContext context)
+        public MassesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Addresses
+        // GET: Masses
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Addresses.Include(a => a.Church);
-            return View(await applicationDbContext.ToListAsync());
+              return View(await _context.Mass.ToListAsync());
         }
 
-        // GET: Addresses/Details/5
+        // GET: Masses/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null || _context.Addresses == null)
+            if (id == null || _context.Mass == null)
             {
                 return NotFound();
             }
 
-            var address = await _context.Addresses
-                .Include(a => a.Church)
+            var mass = await _context.Mass
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (address == null)
+            if (mass == null)
             {
                 return NotFound();
             }
 
-            return View(address);
+            return View(mass);
         }
 
-        // GET: Addresses/Create
+        // GET: Masses/Create
         public IActionResult Create()
         {
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id");
             return View();
         }
 
-        // POST: Addresses/Create
+        // POST: Masses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StreetName,StreetNumber,City,ZipCode,ChurchId,Id,OwnerId")] Address address)
+        public async Task<IActionResult> Create([Bind("DateTime,Id,OwnerId")] Mass mass)
         {
             if (ModelState.IsValid)
             {
-                address.Id = Guid.NewGuid();
-                _context.Add(address);
+                mass.Id = Guid.NewGuid();
+                _context.Add(mass);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id", address.ChurchId);
-            return View(address);
+            return View(mass);
         }
 
-        // GET: Addresses/Edit/5
+        // GET: Masses/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null || _context.Addresses == null)
+            if (id == null || _context.Mass == null)
             {
                 return NotFound();
             }
 
-            var address = await _context.Addresses.FindAsync(id);
-            if (address == null)
+            var mass = await _context.Mass.FindAsync(id);
+            if (mass == null)
             {
                 return NotFound();
             }
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id", address.ChurchId);
-            return View(address);
+            return View(mass);
         }
 
-        // POST: Addresses/Edit/5
+        // POST: Masses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("StreetName,StreetNumber,City,ZipCode,ChurchId,Id,OwnerId")] Address address)
+        public async Task<IActionResult> Edit(Guid id, [Bind("DateTime,Id,OwnerId")] Mass mass)
         {
-            if (id != address.Id)
+            if (id != mass.Id)
             {
                 return NotFound();
             }
@@ -103,12 +98,12 @@ namespace Oratio.Controllers.Generated
             {
                 try
                 {
-                    _context.Update(address);
+                    _context.Update(mass);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AddressExists(address.Id))
+                    if (!MassExists(mass.Id))
                     {
                         return NotFound();
                     }
@@ -119,51 +114,49 @@ namespace Oratio.Controllers.Generated
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id", address.ChurchId);
-            return View(address);
+            return View(mass);
         }
 
-        // GET: Addresses/Delete/5
+        // GET: Masses/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null || _context.Addresses == null)
+            if (id == null || _context.Mass == null)
             {
                 return NotFound();
             }
 
-            var address = await _context.Addresses
-                .Include(a => a.Church)
+            var mass = await _context.Mass
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (address == null)
+            if (mass == null)
             {
                 return NotFound();
             }
 
-            return View(address);
+            return View(mass);
         }
 
-        // POST: Addresses/Delete/5
+        // POST: Masses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.Addresses == null)
+            if (_context.Mass == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Addresses'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Mass'  is null.");
             }
-            var address = await _context.Addresses.FindAsync(id);
-            if (address != null)
+            var mass = await _context.Mass.FindAsync(id);
+            if (mass != null)
             {
-                _context.Addresses.Remove(address);
+                _context.Mass.Remove(mass);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AddressExists(Guid id)
+        private bool MassExists(Guid id)
         {
-          return _context.Addresses.Any(e => e.Id == id);
+          return _context.Mass.Any(e => e.Id == id);
         }
     }
 }

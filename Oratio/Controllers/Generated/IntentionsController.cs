@@ -10,91 +10,86 @@ using Oratio.Models;
 
 namespace Oratio.Controllers.Generated
 {
-    public class AddressesController : Controller
+    public class IntentionsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public AddressesController(ApplicationDbContext context)
+        public IntentionsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Addresses
+        // GET: Intentions
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Addresses.Include(a => a.Church);
-            return View(await applicationDbContext.ToListAsync());
+              return View(await _context.Intentions.ToListAsync());
         }
 
-        // GET: Addresses/Details/5
+        // GET: Intentions/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null || _context.Addresses == null)
+            if (id == null || _context.Intentions == null)
             {
                 return NotFound();
             }
 
-            var address = await _context.Addresses
-                .Include(a => a.Church)
+            var intention = await _context.Intentions
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (address == null)
+            if (intention == null)
             {
                 return NotFound();
             }
 
-            return View(address);
+            return View(intention);
         }
 
-        // GET: Addresses/Create
+        // GET: Intentions/Create
         public IActionResult Create()
         {
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id");
             return View();
         }
 
-        // POST: Addresses/Create
+        // POST: Intentions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StreetName,StreetNumber,City,ZipCode,ChurchId,Id,OwnerId")] Address address)
+        public async Task<IActionResult> Create([Bind("AskedIntention,Offering,isPaid,Id,OwnerId")] Intention intention)
         {
             if (ModelState.IsValid)
             {
-                address.Id = Guid.NewGuid();
-                _context.Add(address);
+                intention.Id = Guid.NewGuid();
+                _context.Add(intention);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id", address.ChurchId);
-            return View(address);
+            return View(intention);
         }
 
-        // GET: Addresses/Edit/5
+        // GET: Intentions/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null || _context.Addresses == null)
+            if (id == null || _context.Intentions == null)
             {
                 return NotFound();
             }
 
-            var address = await _context.Addresses.FindAsync(id);
-            if (address == null)
+            var intention = await _context.Intentions.FindAsync(id);
+            if (intention == null)
             {
                 return NotFound();
             }
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id", address.ChurchId);
-            return View(address);
+            return View(intention);
         }
 
-        // POST: Addresses/Edit/5
+        // POST: Intentions/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("StreetName,StreetNumber,City,ZipCode,ChurchId,Id,OwnerId")] Address address)
+        public async Task<IActionResult> Edit(Guid id, [Bind("AskedIntention,Offering,isPaid,Id,OwnerId")] Intention intention)
         {
-            if (id != address.Id)
+            if (id != intention.Id)
             {
                 return NotFound();
             }
@@ -103,12 +98,12 @@ namespace Oratio.Controllers.Generated
             {
                 try
                 {
-                    _context.Update(address);
+                    _context.Update(intention);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AddressExists(address.Id))
+                    if (!IntentionExists(intention.Id))
                     {
                         return NotFound();
                     }
@@ -119,51 +114,49 @@ namespace Oratio.Controllers.Generated
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id", address.ChurchId);
-            return View(address);
+            return View(intention);
         }
 
-        // GET: Addresses/Delete/5
+        // GET: Intentions/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null || _context.Addresses == null)
+            if (id == null || _context.Intentions == null)
             {
                 return NotFound();
             }
 
-            var address = await _context.Addresses
-                .Include(a => a.Church)
+            var intention = await _context.Intentions
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (address == null)
+            if (intention == null)
             {
                 return NotFound();
             }
 
-            return View(address);
+            return View(intention);
         }
 
-        // POST: Addresses/Delete/5
+        // POST: Intentions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.Addresses == null)
+            if (_context.Intentions == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Addresses'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Intentions'  is null.");
             }
-            var address = await _context.Addresses.FindAsync(id);
-            if (address != null)
+            var intention = await _context.Intentions.FindAsync(id);
+            if (intention != null)
             {
-                _context.Addresses.Remove(address);
+                _context.Intentions.Remove(intention);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AddressExists(Guid id)
+        private bool IntentionExists(Guid id)
         {
-          return _context.Addresses.Any(e => e.Id == id);
+          return _context.Intentions.Any(e => e.Id == id);
         }
     }
 }

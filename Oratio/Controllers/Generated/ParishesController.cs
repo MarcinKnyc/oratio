@@ -54,7 +54,7 @@ namespace Oratio.Controllers.Generated
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Dedicated")] Parish parish)
+        public async Task<IActionResult> Create([Bind("Name,Dedicated,MinimumOffering,Id,OwnerId")] Parish parish)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace Oratio.Controllers.Generated
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Dedicated")] Parish parish)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Dedicated,MinimumOffering,Id,OwnerId")] Parish parish)
         {
             if (id != parish.Id)
             {

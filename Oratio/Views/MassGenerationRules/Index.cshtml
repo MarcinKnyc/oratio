@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Oratio.Models.Address>
+﻿@model IEnumerable<Oratio.Models.MassGenerationRule>
 
 @{
     ViewData["Title"] = "Index";
@@ -14,19 +14,25 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StreetName)
+                @Html.DisplayNameFor(model => model.TimesToRepeat)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StreetNumber)
+                @Html.DisplayNameFor(model => model.TimespanToRepeat)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.City)
+                @Html.DisplayNameFor(model => model.RuleTerminationTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ZipCode)
+                @Html.DisplayNameFor(model => model.DayOfWeek)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Church)
+                @Html.DisplayNameFor(model => model.WeekNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RuleStartTime)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.OwnerId)
@@ -38,19 +44,25 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.StreetName)
+                @Html.DisplayFor(modelItem => item.TimesToRepeat)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StreetNumber)
+                @Html.DisplayFor(modelItem => item.TimespanToRepeat)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.City)
+                @Html.DisplayFor(modelItem => item.RuleTerminationTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ZipCode)
+                @Html.DisplayFor(modelItem => item.DayOfWeek)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Church.Id)
+                @Html.DisplayFor(modelItem => item.WeekNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RuleStartTime)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OwnerId)

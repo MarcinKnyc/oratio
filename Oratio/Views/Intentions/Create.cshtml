@@ -1,4 +1,4 @@
-﻿@model Oratio.Models.Parish
+﻿@model Oratio.Models.Intention
 
 @{
     ViewData["Title"] = "Create";
@@ -7,26 +7,26 @@
 
 <h1>Create</h1>
 
-<h4>Parish</h4>
+<h4>Intention</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="AskedIntention" class="control-label"></label>
+                <input asp-for="AskedIntention" class="form-control" />
+                <span asp-validation-for="AskedIntention" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Dedicated" class="control-label"></label>
-                <input asp-for="Dedicated" class="form-control" />
-                <span asp-validation-for="Dedicated" class="text-danger"></span>
+                <label asp-for="Offering" class="control-label"></label>
+                <input asp-for="Offering" class="form-control" />
+                <span asp-validation-for="Offering" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="MinimumOffering" class="control-label"></label>
-                <input asp-for="MinimumOffering" class="form-control" />
-                <span asp-validation-for="MinimumOffering" class="text-danger"></span>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="isPaid" /> @Html.DisplayNameFor(model => model.isPaid)
+                </label>
             </div>
             <div class="form-group">
                 <label asp-for="OwnerId" class="control-label"></label>

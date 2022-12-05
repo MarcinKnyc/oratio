@@ -1,4 +1,4 @@
-﻿@model Oratio.Models.Church
+﻿@model Oratio.Models.Mass
 
 @{
     ViewData["Title"] = "Details";
@@ -8,20 +8,14 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Church</h4>
+    <h4>Mass</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.DateTime)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Parish)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Parish.Id)
+            @Html.DisplayFor(model => model.DateTime)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.OwnerId)

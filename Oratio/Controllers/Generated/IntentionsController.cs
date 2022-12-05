@@ -48,20 +48,42 @@ namespace Oratio.Controllers.Generated
         {
             return View();
         }
+        // GET: Intentions/Confirm
+        public IActionResult Confirm()
+        {
+            return View();
+        }
+
+        // POST: Intentions/Confirm/5
+        [HttpPost, ActionName("Confirm")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Confirm(Guid id)
+        {
+            var intention = await _context.Intentions.FindAsync(id);
+
+            if (intention != null)
+            {
+                intention.isPaid = true;
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
         // POST: Intentions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AskedIntention,Offering,isPaid,Id,OwnerId")] Intention intention)
+        public async Task<IActionResult> Create([Bind("AskedIntention,Offering,isPaid,isApproved,Id,OwnerId")] Intention intention)
         {
             if (ModelState.IsValid)
             {
                 intention.Id = Guid.NewGuid();
                 _context.Add(intention);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Confirm", new { intention.Id });
+
             }
             return View(intention);
         }
@@ -87,7 +109,7 @@ namespace Oratio.Controllers.Generated
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("AskedIntention,Offering,isPaid,Id,OwnerId")] Intention intention)
+        public async Task<IActionResult> Edit(Guid id, [Bind("AskedIntention,Offering,isPaid,isApproved,Id,OwnerId")] Intention intention)
         {
             if (id != intention.Id)
             {

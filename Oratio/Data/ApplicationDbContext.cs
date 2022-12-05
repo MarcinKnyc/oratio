@@ -25,5 +25,6 @@ namespace Oratio.Data
                     }
                 );
         }
+        public DbSet<Oratio.Models.Intention> Intention { get; set; }
     }
 }

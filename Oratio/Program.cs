@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Oratio.Areas.Identity.Data;
+using Oratio.Areas.Identity.Pages.Account.Manage;
 using Oratio.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<OratioUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<UserContext>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<ParishLinkRepository>();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

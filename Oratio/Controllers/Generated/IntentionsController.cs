@@ -48,6 +48,31 @@ namespace Oratio.Controllers.Generated
         {
             return View();
         }
+        // GET: Intentions/Confirm
+        public IActionResult Confirm()
+        {
+            return View();
+        }
+
+        // POST: Intentions/Confirm/5
+        [HttpPost, ActionName("Confirm")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Confirm(Guid id)
+        {
+            if (_context.Intentions == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Intentions' is null.");
+            }
+            var intention = await _context.Intentions.FindAsync(id);
+
+            if (intention != null)
+            {
+                intention.isPaid = true;
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
         // POST: Intentions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -61,7 +86,8 @@ namespace Oratio.Controllers.Generated
                 intention.Id = Guid.NewGuid();
                 _context.Add(intention);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Confirm", new { intention.Id });
+
             }
             return View(intention);
         }

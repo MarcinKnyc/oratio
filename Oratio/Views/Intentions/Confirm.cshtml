@@ -1,0 +1,15 @@
+﻿@model Oratio.Models.Intention
+
+@{
+    ViewData["Title"] = "Confirm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Confirm your payment</h1>
+ <form asp-action="Confirm">
+    <input type="submit" value="Confirm" class="btn btn-primary"/>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

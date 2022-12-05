@@ -18,8 +18,12 @@ namespace Oratio.Areas.Identity.Pages.Account.Manage
         public string getParishIdForLoggedUser()
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var parishId = _context.Parishes.FirstOrDefault(parish => parish.OwnerId.ToString() == userId).Id;
-            return parishId.ToString();
+            var parish = _context.Parishes.FirstOrDefault(parish => parish.OwnerId.ToString() == userId);
+            var parishId = parish == null ?
+                null :
+                parish.Id.ToString();
+
+            return parishId ?? "";
         }
     }
 }

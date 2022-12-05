@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Oratio.Models.Address>
+﻿@model IEnumerable<Oratio.Models.Intention>
 
 @{
     ViewData["Title"] = "Index";
@@ -14,19 +14,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StreetName)
+                @Html.DisplayNameFor(model => model.AskedIntention)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StreetNumber)
+                @Html.DisplayNameFor(model => model.Offering)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ZipCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Church)
+                @Html.DisplayNameFor(model => model.isPaid)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.OwnerId)
@@ -38,19 +32,13 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.StreetName)
+                @Html.DisplayFor(modelItem => item.AskedIntention)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StreetNumber)
+                @Html.DisplayFor(modelItem => item.Offering)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ZipCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Church.Id)
+                @Html.DisplayFor(modelItem => item.isPaid)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OwnerId)

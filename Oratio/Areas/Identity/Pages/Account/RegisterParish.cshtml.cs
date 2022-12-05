@@ -22,7 +22,7 @@ using Oratio.Areas.Identity.Data;
 
 namespace Oratio.Areas.Identity.Pages.Account
 {
-    public class RegisterModel : PageModel
+    public class RegisterParishModel : PageModel
     {
         private readonly SignInManager<OratioUser> _signInManager;
         private readonly UserManager<OratioUser> _userManager;
@@ -31,7 +31,7 @@ namespace Oratio.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
-        public RegisterModel(
+        public RegisterParishModel(
             UserManager<OratioUser> userManager,
             IUserStore<OratioUser> userStore,
             SignInManager<OratioUser> signInManager,
@@ -115,8 +115,8 @@ namespace Oratio.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
                 user.IsModerator = false;
-                user.IsFaithful = true;
-                user.IsAdministrator = false;
+                user.IsFaithful = false;
+                user.IsAdministrator = true;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

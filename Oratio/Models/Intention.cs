@@ -8,6 +8,6 @@ namespace Oratio.Models
         public float? Offering { get; set; }
         public bool isPaid { get; set; }
         public bool isApproved { get; set; }
-        public Mass Mass { get; set; }
+        public Mass? Mass { get; set; }
     }
 }

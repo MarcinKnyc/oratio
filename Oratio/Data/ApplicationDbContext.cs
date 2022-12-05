@@ -9,6 +9,8 @@ namespace Oratio.Data
         public DbSet<Address> Addresses{ get; set; }
         public DbSet<Church> Churches { get; set; }
         public DbSet<Parish> Parishes { get; set; }
+        public DbSet<Intention> Intentions { get; set; }
+        public DbSet<MassGenerationRule> MassGenerationRules { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -25,6 +27,6 @@ namespace Oratio.Data
                     }
                 );
         }
-        public DbSet<Oratio.Models.Intention> Intention { get; set; }
+        public DbSet<Oratio.Models.Mass> Mass { get; set; }
     }
 }

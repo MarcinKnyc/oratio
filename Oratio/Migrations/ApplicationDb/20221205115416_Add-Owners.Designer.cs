@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Oratio.Data;
 
@@ -11,9 +12,10 @@ using Oratio.Data;
 namespace Oratio.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221205115416_Add-Owners")]
+    partial class AddOwners
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,7 +56,7 @@ namespace Oratio.Migrations.ApplicationDb
                     b.HasIndex("ChurchId")
                         .IsUnique();
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("Oratio.Models.Church", b =>
@@ -77,7 +79,7 @@ namespace Oratio.Migrations.ApplicationDb
 
                     b.HasIndex("ParishId");
 
-                    b.ToTable("Churches", (string)null);
+                    b.ToTable("Churches");
                 });
 
             modelBuilder.Entity("Oratio.Models.Intention", b =>
@@ -193,7 +195,7 @@ namespace Oratio.Migrations.ApplicationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Parishes", (string)null);
+                    b.ToTable("Parishes");
 
                     b.HasData(
                         new

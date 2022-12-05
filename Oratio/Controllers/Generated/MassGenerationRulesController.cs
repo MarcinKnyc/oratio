@@ -10,91 +10,86 @@ using Oratio.Models;
 
 namespace Oratio.Controllers.Generated
 {
-    public class AddressesController : Controller
+    public class MassGenerationRulesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public AddressesController(ApplicationDbContext context)
+        public MassGenerationRulesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Addresses
+        // GET: MassGenerationRules
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Addresses.Include(a => a.Church);
-            return View(await applicationDbContext.ToListAsync());
+              return View(await _context.MassGenerationRules.ToListAsync());
         }
 
-        // GET: Addresses/Details/5
+        // GET: MassGenerationRules/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null || _context.Addresses == null)
+            if (id == null || _context.MassGenerationRules == null)
             {
                 return NotFound();
             }
 
-            var address = await _context.Addresses
-                .Include(a => a.Church)
+            var massGenerationRule = await _context.MassGenerationRules
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (address == null)
+            if (massGenerationRule == null)
             {
                 return NotFound();
             }
 
-            return View(address);
+            return View(massGenerationRule);
         }
 
-        // GET: Addresses/Create
+        // GET: MassGenerationRules/Create
         public IActionResult Create()
         {
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id");
             return View();
         }
 
-        // POST: Addresses/Create
+        // POST: MassGenerationRules/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StreetName,StreetNumber,City,ZipCode,ChurchId,Id,OwnerId")] Address address)
+        public async Task<IActionResult> Create([Bind("TimesToRepeat,TimespanToRepeat,RuleTerminationTime,DayOfWeek,WeekNumber,IsActive,RuleStartTime,Id,OwnerId")] MassGenerationRule massGenerationRule)
         {
             if (ModelState.IsValid)
             {
-                address.Id = Guid.NewGuid();
-                _context.Add(address);
+                massGenerationRule.Id = Guid.NewGuid();
+                _context.Add(massGenerationRule);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id", address.ChurchId);
-            return View(address);
+            return View(massGenerationRule);
         }
 
-        // GET: Addresses/Edit/5
+        // GET: MassGenerationRules/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null || _context.Addresses == null)
+            if (id == null || _context.MassGenerationRules == null)
             {
                 return NotFound();
             }
 
-            var address = await _context.Addresses.FindAsync(id);
-            if (address == null)
+            var massGenerationRule = await _context.MassGenerationRules.FindAsync(id);
+            if (massGenerationRule == null)
             {
                 return NotFound();
             }
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id", address.ChurchId);
-            return View(address);
+            return View(massGenerationRule);
         }
 
-        // POST: Addresses/Edit/5
+        // POST: MassGenerationRules/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("StreetName,StreetNumber,City,ZipCode,ChurchId,Id,OwnerId")] Address address)
+        public async Task<IActionResult> Edit(Guid id, [Bind("TimesToRepeat,TimespanToRepeat,RuleTerminationTime,DayOfWeek,WeekNumber,IsActive,RuleStartTime,Id,OwnerId")] MassGenerationRule massGenerationRule)
         {
-            if (id != address.Id)
+            if (id != massGenerationRule.Id)
             {
                 return NotFound();
             }
@@ -103,12 +98,12 @@ namespace Oratio.Controllers.Generated
             {
                 try
                 {
-                    _context.Update(address);
+                    _context.Update(massGenerationRule);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AddressExists(address.Id))
+                    if (!MassGenerationRuleExists(massGenerationRule.Id))
                     {
                         return NotFound();
                     }
@@ -119,51 +114,49 @@ namespace Oratio.Controllers.Generated
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id", address.ChurchId);
-            return View(address);
+            return View(massGenerationRule);
         }
 
-        // GET: Addresses/Delete/5
+        // GET: MassGenerationRules/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null || _context.Addresses == null)
+            if (id == null || _context.MassGenerationRules == null)
             {
                 return NotFound();
             }
 
-            var address = await _context.Addresses
-                .Include(a => a.Church)
+            var massGenerationRule = await _context.MassGenerationRules
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (address == null)
+            if (massGenerationRule == null)
             {
                 return NotFound();
             }
 
-            return View(address);
+            return View(massGenerationRule);
         }
 
-        // POST: Addresses/Delete/5
+        // POST: MassGenerationRules/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.Addresses == null)
+            if (_context.MassGenerationRules == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Addresses'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.MassGenerationRules'  is null.");
             }
-            var address = await _context.Addresses.FindAsync(id);
-            if (address != null)
+            var massGenerationRule = await _context.MassGenerationRules.FindAsync(id);
+            if (massGenerationRule != null)
             {
-                _context.Addresses.Remove(address);
+                _context.MassGenerationRules.Remove(massGenerationRule);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AddressExists(Guid id)
+        private bool MassGenerationRuleExists(Guid id)
         {
-          return _context.Addresses.Any(e => e.Id == id);
+          return _context.MassGenerationRules.Any(e => e.Id == id);
         }
     }
 }

@@ -22,7 +22,8 @@ namespace Oratio.Controllers.Generated
         // GET: Masses
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Mass.ToListAsync());
+            var applicationDbContext = _context.Mass.Include(m => m.Church);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Masses/Details/5
@@ -34,6 +35,7 @@ namespace Oratio.Controllers.Generated
             }
 
             var mass = await _context.Mass
+                .Include(m => m.Church)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (mass == null)
             {
@@ -46,6 +48,7 @@ namespace Oratio.Controllers.Generated
         // GET: Masses/Create
         public IActionResult Create()
         {
+            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace Oratio.Controllers.Generated
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DateTime,Id,OwnerId")] Mass mass)
+        public async Task<IActionResult> Create([Bind("DateTime,ChurchId,Id,OwnerId")] Mass mass)
         {
             if (ModelState.IsValid)
             {
@@ -63,6 +66,7 @@ namespace Oratio.Controllers.Generated
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id", mass.ChurchId);
             return View(mass);
         }
 
@@ -79,6 +83,7 @@ namespace Oratio.Controllers.Generated
             {
                 return NotFound();
             }
+            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id", mass.ChurchId);
             return View(mass);
         }
 
@@ -87,7 +92,7 @@ namespace Oratio.Controllers.Generated
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("DateTime,Id,OwnerId")] Mass mass)
+        public async Task<IActionResult> Edit(Guid id, [Bind("DateTime,ChurchId,Id,OwnerId")] Mass mass)
         {
             if (id != mass.Id)
             {
@@ -114,6 +119,7 @@ namespace Oratio.Controllers.Generated
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id", mass.ChurchId);
             return View(mass);
         }
 
@@ -126,6 +132,7 @@ namespace Oratio.Controllers.Generated
             }
 
             var mass = await _context.Mass
+                .Include(m => m.Church)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (mass == null)
             {

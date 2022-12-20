@@ -26,6 +26,9 @@
                 @Html.DisplayNameFor(model => model.isApproved)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Mass)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.OwnerId)
             </th>
             <th></th>
@@ -45,6 +48,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.isApproved)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mass.Id)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OwnerId)

@@ -17,6 +17,9 @@
                 @Html.DisplayNameFor(model => model.DateTime)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Church)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.OwnerId)
             </th>
             <th></th>
@@ -27,6 +30,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.DateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Church.Id)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OwnerId)

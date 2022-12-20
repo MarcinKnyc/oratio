@@ -22,7 +22,8 @@ namespace Oratio.Controllers.Generated
         // GET: MassGenerationRules
         public async Task<IActionResult> Index()
         {
-              return View(await _context.MassGenerationRules.ToListAsync());
+            var applicationDbContext = _context.MassGenerationRules.Include(m => m.Parish);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: MassGenerationRules/Details/5
@@ -34,6 +35,7 @@ namespace Oratio.Controllers.Generated
             }
 
             var massGenerationRule = await _context.MassGenerationRules
+                .Include(m => m.Parish)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (massGenerationRule == null)
             {
@@ -46,6 +48,7 @@ namespace Oratio.Controllers.Generated
         // GET: MassGenerationRules/Create
         public IActionResult Create()
         {
+            ViewData["ParishId"] = new SelectList(_context.Parishes, "Id", "Id");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace Oratio.Controllers.Generated
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TimesToRepeat,TimespanToRepeat,RuleTerminationTime,DayOfWeek,WeekNumber,IsActive,RuleStartTime,Id,OwnerId")] MassGenerationRule massGenerationRule)
+        public async Task<IActionResult> Create([Bind("ParishId,TimesToRepeat,TimespanToRepeat,RuleTerminationTime,DayOfWeek,WeekNumber,IsActive,RuleStartTime,Id,OwnerId")] MassGenerationRule massGenerationRule)
         {
             if (ModelState.IsValid)
             {
@@ -63,6 +66,7 @@ namespace Oratio.Controllers.Generated
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ParishId"] = new SelectList(_context.Parishes, "Id", "Id", massGenerationRule.ParishId);
             return View(massGenerationRule);
         }
 
@@ -79,6 +83,7 @@ namespace Oratio.Controllers.Generated
             {
                 return NotFound();
             }
+            ViewData["ParishId"] = new SelectList(_context.Parishes, "Id", "Id", massGenerationRule.ParishId);
             return View(massGenerationRule);
         }
 
@@ -87,7 +92,7 @@ namespace Oratio.Controllers.Generated
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("TimesToRepeat,TimespanToRepeat,RuleTerminationTime,DayOfWeek,WeekNumber,IsActive,RuleStartTime,Id,OwnerId")] MassGenerationRule massGenerationRule)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ParishId,TimesToRepeat,TimespanToRepeat,RuleTerminationTime,DayOfWeek,WeekNumber,IsActive,RuleStartTime,Id,OwnerId")] MassGenerationRule massGenerationRule)
         {
             if (id != massGenerationRule.Id)
             {
@@ -114,6 +119,7 @@ namespace Oratio.Controllers.Generated
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ParishId"] = new SelectList(_context.Parishes, "Id", "Id", massGenerationRule.ParishId);
             return View(massGenerationRule);
         }
 
@@ -126,6 +132,7 @@ namespace Oratio.Controllers.Generated
             }
 
             var massGenerationRule = await _context.MassGenerationRules
+                .Include(m => m.Parish)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (massGenerationRule == null)
             {

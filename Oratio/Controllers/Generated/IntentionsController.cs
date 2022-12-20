@@ -46,30 +46,9 @@ namespace Oratio.Controllers.Generated
         // GET: Intentions/Create
         public IActionResult Create()
         {
-            return View();
+            return View("/Views/Intentions/CreateManual.cshtml");
         }
-        // GET: Intentions/Confirm
-        public IActionResult Confirm()
-        {
-            return View();
-        }
-
-        // POST: Intentions/Confirm/5
-        [HttpPost, ActionName("Confirm")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Confirm(Guid id)
-        {
-            var intention = await _context.Intentions.FindAsync(id);
-
-            if (intention != null)
-            {
-                intention.isPaid = true;
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
+        
         // POST: Intentions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.

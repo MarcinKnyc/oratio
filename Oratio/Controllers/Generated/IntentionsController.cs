@@ -46,12 +46,12 @@ namespace Oratio.Controllers.Generated
         // GET: Intentions/Create
         public IActionResult Create()
         {
-            return View();
+            return View("/Views/Intentions/CreateManual.cshtml");
         }
         // GET: Intentions/Confirm
         public IActionResult Confirm()
         {
-            return View();
+            return View("/Views/Intentions/ConfirmManual.cshtml");
         }
 
         // POST: Intentions/Confirm/5

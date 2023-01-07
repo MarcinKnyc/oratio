@@ -1,5 +1,5 @@
 ﻿@inject SignInManager<OratioUser> SignInManager
-@inject ParishLinkRepository repo
+@inject CurrentUserRepository repo
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
     var userId = repo.getParishIdForLoggedUser();

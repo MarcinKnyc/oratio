@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Oratio.Areas.Identity.Pages.Account.Manage;
 using Oratio.Data;
 using Oratio.Models;
 
@@ -14,15 +15,30 @@ namespace Oratio.Controllers.Generated
     {
         private readonly ApplicationDbContext _context;
 
-        public ChurchesController(ApplicationDbContext context)
+        private readonly ParishLinkRepository _parishLinkRepository;
+
+        public ChurchesController(ApplicationDbContext context, ParishLinkRepository parishLinkRepository)
         {
             _context = context;
+            _parishLinkRepository = parishLinkRepository;
         }
 
         // GET: Churches
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Churches.Include(c => c.Parish);
+            
+
+            var parishId = _parishLinkRepository.getParishIdForLoggedUser();
+
+            var applicationDbContext = _context.Churches
+                .Where(church => church.ParishId.ToString()==parishId);
+
+                applicationDbContext.Include(church => church.Parish);
+           //  var applicationDbContext = _context.Churches.Include(c => c.Parish);
+
+
+            //niech sprawdza kim jest user (parafia tylko swoje, user wszystkie)
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -49,7 +65,7 @@ namespace Oratio.Controllers.Generated
         public IActionResult Create()
         {
             ViewData["ParishId"] = new SelectList(_context.Parishes, "Id", "Id");
-            return View();
+            return View("/Views/Churches/CreateManual.cshtml"); //ma dodawać tylko do mojego parish id
         }
 
         // POST: Churches/Create
@@ -59,6 +75,7 @@ namespace Oratio.Controllers.Generated
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,ParishId,Id,OwnerId")] Church church)
         {
+            //tu dodać parishID do modelu, parishid= ten z parish repository, podac ścieżke do createManual
             if (ModelState.IsValid)
             {
                 church.Id = Guid.NewGuid();
@@ -84,7 +101,7 @@ namespace Oratio.Controllers.Generated
                 return NotFound();
             }
             ViewData["ParishId"] = new SelectList(_context.Parishes, "Id", "Id", church.ParishId);
-            return View(church);
+            return View("/Views/Churches/EditManual.cshtml"); //tutaj ścieżka do editmanual
         }
 
         // POST: Churches/Edit/5

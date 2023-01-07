@@ -1,4 +1,6 @@
-﻿using Oratio.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Oratio.Data;
+using Oratio.Models;
 
 namespace Oratio.Areas.Identity.Data
 {
@@ -13,6 +15,26 @@ namespace Oratio.Areas.Identity.Data
         public OratioUser? FetchUserById(Guid id)
         {
             return _userContext.Users.FirstOrDefault(user => user.Id == id.ToString());
+        }
+
+        public void ActivateUserById(Guid id)
+        {
+            var user = FetchUserById(id);
+            if (user is null) return;
+            OratioUser userNotNull = user;
+            user.IsActive = true;            
+            _userContext.Update(userNotNull);
+            _userContext.SaveChanges();            
+        }
+
+        public void DeactivateUserById(Guid id)
+        {
+            var user = FetchUserById(id);
+            if (user is null) return;
+            OratioUser userNotNull = user;
+            user.IsActive = false;
+            _userContext.Update(userNotNull);
+            _userContext.SaveChanges();
         }
     }
 }

@@ -19,7 +19,10 @@ namespace Oratio.Areas.Identity.Data
             _oratioUserRepository = oratioUserRepository;
         }
 
-        public bool isLoggedIn() => _httpContextAccessor.HttpContext is not null && _httpContextAccessor.HttpContext.User is not null;
+        public bool isLoggedIn() => _httpContextAccessor.HttpContext is not null 
+            && _httpContextAccessor.HttpContext.User is not null
+            && _httpContextAccessor.HttpContext.User.Identity is not null
+            && _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
 
         public bool isLoggedInAsParish()
         {

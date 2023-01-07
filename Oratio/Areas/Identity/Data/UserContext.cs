@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Oratio.Areas.Identity.Data;
 
-namespace Oratio.Data;
+namespace Oratio.Areas.Identity.Data;
 
 public class UserContext : IdentityDbContext<OratioUser>
 {

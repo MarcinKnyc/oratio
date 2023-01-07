@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Oratio.Areas.Identity.Data;
 using Oratio.Areas.Identity.Pages.Account.Manage;
 using Oratio.Data;
 using Oratio.Models;
@@ -15,31 +16,33 @@ namespace Oratio.Controllers.Generated
     {
         private readonly ApplicationDbContext _context;
 
-        private readonly ParishLinkRepository _parishLinkRepository;
+        private readonly CurrentUserRepository _currentUserRepository;
 
-        public ChurchesController(ApplicationDbContext context, ParishLinkRepository parishLinkRepository)
+        public ChurchesController(ApplicationDbContext context, CurrentUserRepository parishLinkRepository)
         {
             _context = context;
-            _parishLinkRepository = parishLinkRepository;
+            _currentUserRepository = parishLinkRepository;
         }
 
         // GET: Churches
         public async Task<IActionResult> Index()
         {
-            
-
-            var parishId = _parishLinkRepository.getParishIdForLoggedUser();
-
-            var applicationDbContext = _context.Churches
-                .Where(church => church.ParishId.ToString()==parishId);
+           
+            if (_currentUserRepository.isLoggedInAsParish() == true)
+            {
+                var parishId = _currentUserRepository.getParishIdForLoggedUser();
+                var applicationDbContext = _context.Churches
+                    .Where(church => church.ParishId.ToString() == parishId);
 
                 applicationDbContext.Include(church => church.Parish);
-           //  var applicationDbContext = _context.Churches.Include(c => c.Parish);
-
-
-            //niech sprawdza kim jest user (parafia tylko swoje, user wszystkie)
-
-            return View(await applicationDbContext.ToListAsync());
+                return View(await applicationDbContext.ToListAsync());
+            }
+            else
+            {
+                var applicationDbContext = _context.Churches.Include(church => church.Parish);
+                return View(await applicationDbContext.ToListAsync());
+            }
+ 
         }
 
         // GET: Churches/Details/5
@@ -65,7 +68,7 @@ namespace Oratio.Controllers.Generated
         public IActionResult Create()
         {
             ViewData["ParishId"] = new SelectList(_context.Parishes, "Id", "Id");
-            return View("/Views/Churches/CreateManual.cshtml"); //ma dodawać tylko do mojego parish id
+            return View("/Views/Churches/CreateManual.cshtml"); 
         }
 
         // POST: Churches/Create
@@ -76,8 +79,11 @@ namespace Oratio.Controllers.Generated
         public async Task<IActionResult> Create([Bind("Name,ParishId,Id,OwnerId")] Church church)
         {
             //tu dodać parishID do modelu, parishid= ten z parish repository, podac ścieżke do createManual
+            church.ParishId = new Guid(_currentUserRepository.getParishIdForLoggedUser());
+            church.OwnerId = (Guid)_currentUserRepository.getCurrentUserId();
             if (ModelState.IsValid)
             {
+               
                 church.Id = Guid.NewGuid();
                 _context.Add(church);
                 await _context.SaveChangesAsync();
@@ -101,7 +107,7 @@ namespace Oratio.Controllers.Generated
                 return NotFound();
             }
             ViewData["ParishId"] = new SelectList(_context.Parishes, "Id", "Id", church.ParishId);
-            return View("/Views/Churches/EditManual.cshtml"); //tutaj ścieżka do editmanual
+            return View("/Views/Churches/EditManual.cshtml"); 
         }
 
         // POST: Churches/Edit/5

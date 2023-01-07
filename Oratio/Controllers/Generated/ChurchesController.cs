@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Oratio.Areas.Identity.Data;
+using Oratio.Areas.Identity.Pages.Account.Manage;
 using Oratio.Data;
 using Oratio.Models;
 
@@ -14,16 +16,33 @@ namespace Oratio.Controllers.Generated
     {
         private readonly ApplicationDbContext _context;
 
-        public ChurchesController(ApplicationDbContext context)
+        private readonly CurrentUserRepository _currentUserRepository;
+
+        public ChurchesController(ApplicationDbContext context, CurrentUserRepository parishLinkRepository)
         {
             _context = context;
+            _currentUserRepository = parishLinkRepository;
         }
 
         // GET: Churches
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Churches.Include(c => c.Parish);
-            return View(await applicationDbContext.ToListAsync());
+           
+            if (_currentUserRepository.isLoggedInAsParish() == true)
+            {
+                var parishId = _currentUserRepository.getParishIdForLoggedUser();
+                var applicationDbContext = _context.Churches
+                    .Where(church => church.ParishId.ToString() == parishId);
+
+                applicationDbContext.Include(church => church.Parish);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            else
+            {
+                var applicationDbContext = _context.Churches.Include(church => church.Parish);
+                return View(await applicationDbContext.ToListAsync());
+            }
+ 
         }
 
         // GET: Churches/Details/5
@@ -48,8 +67,9 @@ namespace Oratio.Controllers.Generated
         // GET: Churches/Create
         public IActionResult Create()
         {
+            if (!_currentUserRepository.isLoggedInAsParish()) return Unauthorized("Only parish administrator can perform this action.");
             ViewData["ParishId"] = new SelectList(_context.Parishes, "Id", "Id");
-            return View();
+            return View("/Views/Churches/CreateManual.cshtml"); 
         }
 
         // POST: Churches/Create
@@ -59,8 +79,16 @@ namespace Oratio.Controllers.Generated
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,ParishId,Id,OwnerId")] Church church)
         {
+            if (!_currentUserRepository.isLoggedInAsParish()) return Unauthorized("Only parish administrator can perform this action.");
+
+
+            church.ParishId = new Guid(_currentUserRepository.getParishIdForLoggedUser());
+        
+            church.OwnerId = (Guid)_currentUserRepository.getCurrentUserId();
+
             if (ModelState.IsValid)
             {
+               
                 church.Id = Guid.NewGuid();
                 _context.Add(church);
                 await _context.SaveChangesAsync();
@@ -73,6 +101,7 @@ namespace Oratio.Controllers.Generated
         // GET: Churches/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
+            if (!_currentUserRepository.isLoggedInAsParish()) return Unauthorized("Only parish administrator can perform this action.");
             if (id == null || _context.Churches == null)
             {
                 return NotFound();
@@ -84,7 +113,7 @@ namespace Oratio.Controllers.Generated
                 return NotFound();
             }
             ViewData["ParishId"] = new SelectList(_context.Parishes, "Id", "Id", church.ParishId);
-            return View(church);
+            return View("/Views/Churches/EditManual.cshtml"); 
         }
 
         // POST: Churches/Edit/5
@@ -94,10 +123,17 @@ namespace Oratio.Controllers.Generated
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("Name,ParishId,Id,OwnerId")] Church church)
         {
+            if (!_currentUserRepository.isLoggedInAsParish()) return Unauthorized("Only parish administrator can perform this action.");
+
             if (id != church.Id)
             {
                 return NotFound();
             }
+            church.ParishId = new Guid(_currentUserRepository.getParishIdForLoggedUser());
+
+
+
+            church.OwnerId = (Guid)_currentUserRepository.getCurrentUserId();
 
             if (ModelState.IsValid)
             {

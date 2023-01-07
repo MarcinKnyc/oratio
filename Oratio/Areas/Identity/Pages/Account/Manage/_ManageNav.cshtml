@@ -2,7 +2,7 @@
 @inject CurrentUserRepository repo
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
-    var userId = repo.getParishIdForLoggedUser();
+    var parishId = repo.getParishIdForLoggedUser();
 }
 <ul class="nav nav-pills flex-column">
     <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
@@ -12,5 +12,5 @@
     {
         <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li>
     }
-    <li class="nav-item"><a asp-action="Edit" asp-controller="Parishes" asp-route-id="@userId" class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="parish-settings">Parish settings</a></li>
+    <li class="nav-item"><a asp-action="Edit" asp-controller="Parishes" asp-route-id="@parishId" class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="parish-settings">Parish settings</a></li>
 </ul>

@@ -24,45 +24,50 @@ namespace Oratio.Controllers
         // GET: UserActivations
         public async Task<IActionResult> Index()
         {
-            //if (!_currentUserRepository.isLoggedInAsModerator()) return Unauthorized();
-            return View(await _context.Users.Where(user => user.IsAdministrator).ToListAsync());
+            if (!_currentUserRepository.isLoggedInAsModerator()) return Unauthorized();
+            return View(await _context.Users.ToListAsync());
         }
 
         // GET: UserActivations/Activate/{Id}
         public IActionResult Activate(Guid? id)
         {
+            if (!_currentUserRepository.isLoggedInAsModerator()) return Unauthorized();
             if (id == null || _context.Users == null)
             {
                 return NotFound();
             }
             var user = _context.Users.Find(id.ToString());
             if (user == null) return NotFound();
+            if (!user.IsAdministrator) return ValidationProblem("Cannot activate an account that isn't a parish administrator");
             user.IsActive = true;
             _context.Update(user);
             _context.SaveChanges();
 
-            return View("Index", _context.Users.Where(user => user.IsAdministrator).ToList());
+            return View("Index", _context.Users.ToList());
         }
 
         // GET: UserActivations/Activate/{Id}
         public IActionResult Deactivate(Guid? id)
         {
+            if (!_currentUserRepository.isLoggedInAsModerator()) return Unauthorized();
             if (id == null || _context.Users == null)
             {
                 return NotFound();
             }
             var user = _context.Users.Find(id.ToString());
             if (user == null) return NotFound();
+            if (!user.IsAdministrator) return ValidationProblem("Cannot activate an account that isn't a parish administrator");
             user.IsActive = false;
             _context.Update(user);
             _context.SaveChanges();
 
-            return View("Index", _context.Users.Where(user => user.IsAdministrator).ToList());
+            return View("Index", _context.Users.ToList());
         }
 
         // GET: UserActivations/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
+            if (!_currentUserRepository.isLoggedInAsModerator()) return Unauthorized();
             if (id == null || _context.Users == null)
             {
                 return NotFound();
@@ -82,6 +87,7 @@ namespace Oratio.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("Email,EmailConfirmed,IsAdministrator,IsFaithful,IsModerator,IsActive,Id")] OratioUser user)
         {
+            if (!_currentUserRepository.isLoggedInAsModerator()) return Unauthorized();
             if (id.ToString() != user.Id)
             {
                 return NotFound();
@@ -89,10 +95,6 @@ namespace Oratio.Controllers
 
             if (ModelState.IsValid)
             {
-                //var ss = _context.Users.FirstOrDefault(userTemp => userTemp.Id == id.ToString());
-                //if (ss is null) return NotFound();
-                //_context.Update(user);
-                //await _context.SaveChangesAsync();
                 OratioUser userFromDb = await _userManager.FindByIdAsync(user.Id);
                 userFromDb.Email = user.Email;
                 userFromDb.EmailConfirmed = user.EmailConfirmed;

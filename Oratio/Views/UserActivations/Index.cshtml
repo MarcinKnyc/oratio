@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Oratio.Areas.Identity.Data.OratioUser>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Users</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailConfirmed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsAdministrator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsFaithful)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsModerator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.EmailConfirmed)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.IsAdministrator)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.IsFaithful)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.IsModerator)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @if (item.IsActive)
+                {
+                        <a asp-action="Deactivate" asp-route-id="@item.Id">Deactivate</a>
+                }
+                @if (!item.IsActive)
+                {
+                        <a asp-action="Activate" asp-route-id="@item.Id">Activate</a>
+                }
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

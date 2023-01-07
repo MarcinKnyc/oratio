@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Oratio.Data;
 using Oratio.Models;
 
@@ -21,6 +23,7 @@ namespace Oratio.Areas.Identity.Data
         {
             var user = FetchUserById(id);
             if (user is null) return;
+            if (!user.IsAdministrator) return;
             OratioUser userNotNull = user;
             user.IsActive = true;            
             _userContext.Update(userNotNull);
@@ -32,6 +35,7 @@ namespace Oratio.Areas.Identity.Data
             var user = FetchUserById(id);
             if (user is null) return;
             OratioUser userNotNull = user;
+            if (!user.IsAdministrator) return;
             user.IsActive = false;
             _userContext.Update(userNotNull);
             _userContext.SaveChanges();

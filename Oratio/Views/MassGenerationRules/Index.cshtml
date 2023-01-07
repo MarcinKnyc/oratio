@@ -14,6 +14,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Parish)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.TimesToRepeat)
             </th>
             <th>
@@ -43,6 +46,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Parish.Id)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TimesToRepeat)
             </td>

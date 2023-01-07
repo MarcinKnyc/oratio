@@ -22,7 +22,8 @@ namespace Oratio.Controllers.Generated
         // GET: Intentions
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Intentions.ToListAsync());
+            var applicationDbContext = _context.Intentions.Include(i => i.Mass);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Intentions/Details/5
@@ -34,6 +35,7 @@ namespace Oratio.Controllers.Generated
             }
 
             var intention = await _context.Intentions
+                .Include(i => i.Mass)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (intention == null)
             {
@@ -46,15 +48,16 @@ namespace Oratio.Controllers.Generated
         // GET: Intentions/Create
         public IActionResult Create()
         {
+            ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id");
             return View("/Views/Intentions/CreateManual.cshtml");
         }
-        
+
         // POST: Intentions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AskedIntention,Offering,isPaid,isApproved,Id,OwnerId")] Intention intention)
+        public async Task<IActionResult> Create([Bind("AskedIntention,Offering,isPaid,isApproved,MassId,Id,OwnerId")] Intention intention)
         {
             if (ModelState.IsValid)
             {
@@ -62,8 +65,8 @@ namespace Oratio.Controllers.Generated
                 _context.Add(intention);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Confirm", new { intention.Id });
-
             }
+            ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id", intention.MassId);
             return View(intention);
         }
 
@@ -80,6 +83,7 @@ namespace Oratio.Controllers.Generated
             {
                 return NotFound();
             }
+            ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id", intention.MassId);
             return View(intention);
         }
 
@@ -88,7 +92,7 @@ namespace Oratio.Controllers.Generated
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("AskedIntention,Offering,isPaid,isApproved,Id,OwnerId")] Intention intention)
+        public async Task<IActionResult> Edit(Guid id, [Bind("AskedIntention,Offering,isPaid,isApproved,MassId,Id,OwnerId")] Intention intention)
         {
             if (id != intention.Id)
             {
@@ -115,6 +119,7 @@ namespace Oratio.Controllers.Generated
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id", intention.MassId);
             return View(intention);
         }
 
@@ -127,6 +132,7 @@ namespace Oratio.Controllers.Generated
             }
 
             var intention = await _context.Intentions
+                .Include(i => i.Mass)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (intention == null)
             {

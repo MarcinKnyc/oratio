@@ -2,6 +2,7 @@
 {
     public class MassGenerationRule: Entity
     {
+        public Guid ParishId { get; set; }
         public Parish? Parish { get; set; }
         public int? TimesToRepeat { get; set; }
         public string? TimespanToRepeat { get; set; }

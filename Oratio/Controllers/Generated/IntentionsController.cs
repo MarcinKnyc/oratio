@@ -49,7 +49,7 @@ namespace Oratio.Controllers.Generated
         public IActionResult Create()
         {
             ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id");
-            return View();
+            return View("/Views/Intentions/CreateManual.cshtml");
         }
 
         // POST: Intentions/Create
@@ -64,7 +64,7 @@ namespace Oratio.Controllers.Generated
                 intention.Id = Guid.NewGuid();
                 _context.Add(intention);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Confirm", new { intention.Id });
             }
             ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id", intention.MassId);
             return View(intention);

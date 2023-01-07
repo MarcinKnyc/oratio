@@ -16,6 +16,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<OratioUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<UserContext>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<OratioUserRepository>();
 builder.Services.AddTransient<CurrentUserRepository>();
 builder.Services.AddHttpContextAccessor();
 

@@ -67,6 +67,7 @@ namespace Oratio.Controllers.Generated
         // GET: Churches/Create
         public IActionResult Create()
         {
+            if (_currentUserRepository.getCurrentUserId() == null) return Unauthorized("Only parish administrator can perform this action.");
             ViewData["ParishId"] = new SelectList(_context.Parishes, "Id", "Id");
             return View("/Views/Churches/CreateManual.cshtml"); 
         }
@@ -78,9 +79,13 @@ namespace Oratio.Controllers.Generated
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,ParishId,Id,OwnerId")] Church church)
         {
-            //tu dodać parishID do modelu, parishid= ten z parish repository, podac ścieżke do createManual
+
             church.ParishId = new Guid(_currentUserRepository.getParishIdForLoggedUser());
+
+            if (_currentUserRepository.getCurrentUserId() == null) return Unauthorized();
+
             church.OwnerId = (Guid)_currentUserRepository.getCurrentUserId();
+
             if (ModelState.IsValid)
             {
                
@@ -96,6 +101,7 @@ namespace Oratio.Controllers.Generated
         // GET: Churches/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
+            if (_currentUserRepository.getCurrentUserId() == null) return Unauthorized("Only parish administrator can perform this action.");
             if (id == null || _context.Churches == null)
             {
                 return NotFound();
@@ -117,10 +123,17 @@ namespace Oratio.Controllers.Generated
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("Name,ParishId,Id,OwnerId")] Church church)
         {
+            if (_currentUserRepository.isLoggedInAsParish() == false) return Unauthorized();
+
             if (id != church.Id)
             {
                 return NotFound();
             }
+            church.ParishId = new Guid(_currentUserRepository.getParishIdForLoggedUser());
+
+
+
+            church.OwnerId = (Guid)_currentUserRepository.getCurrentUserId();
 
             if (ModelState.IsValid)
             {

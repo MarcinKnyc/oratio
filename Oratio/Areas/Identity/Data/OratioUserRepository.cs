@@ -35,6 +35,7 @@ namespace Oratio.Areas.Identity.Data
             var user = FetchUserById(id);
             if (user is null) return;
             OratioUser userNotNull = user;
+            if (!user.IsAdministrator) return;
             user.IsActive = false;
             _userContext.Update(userNotNull);
             _userContext.SaveChanges();

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Oratio.Areas.Identity.Data;
 using Oratio.Data;
 using Oratio.Models;
 
@@ -13,17 +14,32 @@ namespace Oratio.Controllers.Generated
     public class IntentionsController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public IntentionsController(ApplicationDbContext context)
+        private readonly CurrentUserRepository _currentUserRepository;
+        public IntentionsController(ApplicationDbContext context, CurrentUserRepository parishLinkRepository)
         {
             _context = context;
+            _currentUserRepository = parishLinkRepository;
         }
 
         // GET: Intentions
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Intentions.Include(i => i.Mass);
-            return View(await applicationDbContext.ToListAsync());
+            if(_currentUserRepository.isLoggedInAsParish() == true)
+            {
+                var parishId = _currentUserRepository.getParishIdForLoggedUser();
+                var applicationDbContext = _context.Intentions
+                    .Where(intention => intention.Mass.Church.ParishId.ToString() == parishId);
+                applicationDbContext.Include(intention => intention.Mass);
+                return View(await applicationDbContext.ToListAsync());
+
+            }
+            else //if (_currentUserRepository.isLoggedInAsFaithful() == true)
+            {
+                var applicationDbContext = _context.Intentions.Include(i => i.Mass);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            //var applicationDbContext = _context.Intentions.Include(i => i.Mass);
+            //return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Intentions/Details/5

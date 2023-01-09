@@ -22,6 +22,7 @@ namespace Oratio.Controllers.Generated
         {
             _context = context;
             _currentUserRepository = parishLinkRepository;
+
         }
 
         // GET: Churches
@@ -37,6 +38,7 @@ namespace Oratio.Controllers.Generated
                 applicationDbContext.Include(church => church.Parish);
                 return View(await applicationDbContext.ToListAsync());
             }
+
             else
             {
                 var applicationDbContext = _context.Churches.Include(church => church.Parish);

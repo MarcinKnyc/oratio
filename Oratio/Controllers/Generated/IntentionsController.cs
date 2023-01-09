@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Oratio.Areas.Identity.Data;
 using Oratio.Data;
 using Oratio.Models;
 
@@ -13,10 +14,12 @@ namespace Oratio.Controllers.Generated
     public class IntentionsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly CurrentUserRepository _currentUserRepository;
 
-        public IntentionsController(ApplicationDbContext context)
+        public IntentionsController(ApplicationDbContext context, CurrentUserRepository currentUserRepository)
         {
             _context = context;
+            _currentUserRepository = currentUserRepository;
         }
 
         // GET: Intentions
@@ -48,6 +51,7 @@ namespace Oratio.Controllers.Generated
         // GET: Intentions/Create
         public IActionResult Create()
         {
+            if (_currentUserRepository.isLoggedInAsParish()) return NotFound("Niedostępne dla administratorów parafii.");
             ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id");
             return View("/Views/Intentions/CreateManual.cshtml");
         }
@@ -59,15 +63,25 @@ namespace Oratio.Controllers.Generated
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AskedIntention,Offering,isPaid,isApproved,MassId,Id,OwnerId")] Intention intention)
         {
-            if (ModelState.IsValid)
+            var userId = _currentUserRepository.getCurrentUserId();
+            Mass? mass = _context.Mass.Include(massses => massses.Church).FirstOrDefault(massses => massses.Id == intention.MassId);
+            if (userId == null || _currentUserRepository.isLoggedInAsParish() || mass == null || mass.Church == null) 
             {
-                intention.Id = Guid.NewGuid();
-                _context.Add(intention);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Confirm", new { intention.Id });
+                ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id", intention.MassId);
+                return View(intention);
             }
-            ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id", intention.MassId);
-            return View(intention);
+            Parish? parishInDb = _context.Parishes.FirstOrDefault(parish => parish.Id == mass.Church.ParishId);
+            float? minimalOffering = parishInDb != null ? parishInDb.MinimumOffering : null;
+            if (!intention.ValidateOfferingAmount((int?)minimalOffering) || !ModelState.IsValid)
+            {
+                ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id", intention.MassId);
+                return View(intention);
+            }
+            intention.OwnerId = userId;        
+            intention.Id = Guid.NewGuid();
+            _context.Add(intention);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Confirm", new { intention.Id });
         }
 
         // GET: Intentions/Edit/5

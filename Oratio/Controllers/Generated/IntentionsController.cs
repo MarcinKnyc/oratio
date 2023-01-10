@@ -35,7 +35,11 @@ namespace Oratio.Controllers.Generated
             }
             else //if (_currentUserRepository.isLoggedInAsFaithful() == true)
             {
-                var applicationDbContext = _context.Intentions.Include(i => i.Mass);
+                var userId = _currentUserRepository.getCurrentUserId();
+                if (userId == null) return NotFound("Only accessible for users logged in");
+                var applicationDbContext = _context.Intentions
+                    .Where(i => i.OwnerId.ToString() == userId.ToString())
+                    .Include(i => i.Mass);
                 return View(await applicationDbContext.ToListAsync());
             }
             //var applicationDbContext = _context.Intentions.Include(i => i.Mass);

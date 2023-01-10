@@ -1,4 +1,5 @@
 ﻿using Oratio.Data;
+using Oratio.Models;
 using System.Security.Claims;
 
 namespace Oratio.Areas.Identity.Data
@@ -72,6 +73,15 @@ namespace Oratio.Areas.Identity.Data
                 null :
                 parish.Id.ToString();
             return parishId ?? "";
+        }
+
+        public Parish? getParishForLoggedUser()
+        {
+            if (!isLoggedIn() || !isLoggedInAsParish()) return null;
+
+            var userId = getCurrentUserId().ToString(); //if current user id not found, returns ""
+            var parish = _context.Parishes.FirstOrDefault(parish => parish.OwnerId.ToString() == userId);
+            return parish;
         }
     }
 }

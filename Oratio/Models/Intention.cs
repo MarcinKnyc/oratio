@@ -10,5 +10,12 @@ namespace Oratio.Models
         public bool isApproved { get; set; }
         public Guid MassId { get; set; }
         public Mass? Mass { get; set; }
+
+        public bool ValidateOfferingAmount(int? threshold)
+        {
+            if (threshold== null) { return true; }
+            if (Offering == null) { return false; }
+            return threshold < Offering;
+        }
     }
 }

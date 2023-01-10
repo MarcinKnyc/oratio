@@ -24,7 +24,7 @@ namespace Oratio.Controllers.Generated
         // GET: Intentions
         public async Task<IActionResult> Index()
         {
-            if(_currentUserRepository.isLoggedInAsParish() == true)
+            if(_currentUserRepository.isLoggedInAsParish())
             {
                 var parishId = _currentUserRepository.getParishIdForLoggedUser();
                 var applicationDbContext = _context.Intentions
@@ -33,17 +33,20 @@ namespace Oratio.Controllers.Generated
                 return View(await applicationDbContext.ToListAsync());
 
             }
-            else //if (_currentUserRepository.isLoggedInAsFaithful() == true)
+            else if (_currentUserRepository.isLoggedInAsFaithful())
             {
                 var userId = _currentUserRepository.getCurrentUserId();
                 if (userId == null) return NotFound("Only accessible for users logged in");
                 var applicationDbContext = _context.Intentions
-                    .Where(i => i.OwnerId.ToString() == userId.ToString())
+                    .Where(i => i.OwnerId == userId)
                     .Include(i => i.Mass);
                 return View(await applicationDbContext.ToListAsync());
             }
-            //var applicationDbContext = _context.Intentions.Include(i => i.Mass);
-            //return View(await applicationDbContext.ToListAsync());
+            else //loggedInAsModerator
+            {
+                var applicationDbContext = _context.Intentions.Include(i => i.Mass);
+                return View(await applicationDbContext.ToListAsync());
+            }
         }
 
         // GET: Intentions/Details/5

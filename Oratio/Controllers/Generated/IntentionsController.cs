@@ -25,12 +25,13 @@ namespace Oratio.Controllers.Generated
         // GET: Intentions
         public async Task<IActionResult> Index()
         {
-            if(_currentUserRepository.isLoggedInAsParish())
+            if (!_currentUserRepository.isLoggedIn()) return NotFound("Only accessible for users logged in");
+            if (_currentUserRepository.isLoggedInAsParish())
             {
                 var parishId = _currentUserRepository.getParishIdForLoggedUser();
                 var applicationDbContext = _context.Intentions
-                    .Where(intention => intention.Mass.Church.ParishId.ToString() == parishId);
-                applicationDbContext.Include(intention => intention.Mass);
+                    .Where(intention => intention.Mass.Church.ParishId.ToString() == parishId)
+                    .Include(intention => intention.Mass);
                 return View(await applicationDbContext.ToListAsync());
 
             }

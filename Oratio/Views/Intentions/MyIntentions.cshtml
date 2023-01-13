@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Oratio.Models.Intention>
+
+@{
+    ViewData["Title"] = "MyIntentions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>MyIntentions</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AskedIntention)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Offering)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isPaid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isApproved)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mass)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OwnerId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AskedIntention)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Offering)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.isPaid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.isApproved)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Mass.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OwnerId)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

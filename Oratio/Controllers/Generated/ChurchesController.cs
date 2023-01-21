@@ -47,25 +47,6 @@ namespace Oratio.Controllers.Generated
  
         }
 
-        // GET: Churches/Details/5
-        public async Task<IActionResult> Details(Guid? id)
-        {
-            if (id == null || _context.Churches == null)
-            {
-                return NotFound();
-            }
-
-            var church = await _context.Churches
-                .Include(c => c.Parish)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (church == null)
-            {
-                return NotFound();
-            }
-
-            return View(church);
-        }
-
         // GET: Churches/Create
         public IActionResult Create()
         {

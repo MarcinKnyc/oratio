@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Oratio.Data;
 
@@ -11,9 +12,10 @@ using Oratio.Data;
 namespace Oratio.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230121125316_fixForeignKeys")]
+    partial class fixForeignKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +57,7 @@ namespace Oratio.Migrations.ApplicationDb
                         .IsUnique()
                         .HasFilter("[ChurchId] IS NOT NULL");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("Oratio.Models.Church", b =>
@@ -78,7 +80,7 @@ namespace Oratio.Migrations.ApplicationDb
 
                     b.HasIndex("ParishId");
 
-                    b.ToTable("Churches", (string)null);
+                    b.ToTable("Churches");
                 });
 
             modelBuilder.Entity("Oratio.Models.Intention", b =>
@@ -110,7 +112,7 @@ namespace Oratio.Migrations.ApplicationDb
 
                     b.HasIndex("MassId");
 
-                    b.ToTable("Intentions", (string)null);
+                    b.ToTable("Intentions");
                 });
 
             modelBuilder.Entity("Oratio.Models.Mass", b =>
@@ -132,7 +134,7 @@ namespace Oratio.Migrations.ApplicationDb
 
                     b.HasIndex("ChurchId");
 
-                    b.ToTable("Mass", (string)null);
+                    b.ToTable("Mass");
                 });
 
             modelBuilder.Entity("Oratio.Models.MassGenerationRule", b =>
@@ -172,7 +174,7 @@ namespace Oratio.Migrations.ApplicationDb
 
                     b.HasIndex("ParishId");
 
-                    b.ToTable("MassGenerationRules", (string)null);
+                    b.ToTable("MassGenerationRules");
                 });
 
             modelBuilder.Entity("Oratio.Models.Parish", b =>
@@ -197,7 +199,7 @@ namespace Oratio.Migrations.ApplicationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Parishes", (string)null);
+                    b.ToTable("Parishes");
                 });
 
             modelBuilder.Entity("Oratio.Models.Address", b =>

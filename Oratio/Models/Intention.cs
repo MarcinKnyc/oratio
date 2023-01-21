@@ -8,7 +8,7 @@ namespace Oratio.Models
         public float? Offering { get; set; }
         public bool isPaid { get; set; }
         public bool isApproved { get; set; }
-        public Guid MassId { get; set; }
+        public Guid? MassId { get; set; }
         public Mass? Mass { get; set; }
 
         public bool ValidateOfferingAmount(int? threshold)

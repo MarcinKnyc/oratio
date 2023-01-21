@@ -114,7 +114,7 @@ namespace Oratio.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-                user.IsModerator = false; //zmien na false
+                user.IsModerator = false;
                 user.IsFaithful = true;
                 user.IsAdministrator = false;
 

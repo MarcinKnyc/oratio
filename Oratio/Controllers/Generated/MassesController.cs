@@ -26,25 +26,6 @@ namespace Oratio.Controllers.Generated
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Masses/Details/5
-        public async Task<IActionResult> Details(Guid? id)
-        {
-            if (id == null || _context.Mass == null)
-            {
-                return NotFound();
-            }
-
-            var mass = await _context.Mass
-                .Include(m => m.Church)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (mass == null)
-            {
-                return NotFound();
-            }
-
-            return View(mass);
-        }
-
         // GET: Masses/Create
         public IActionResult Create()
         {

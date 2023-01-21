@@ -17,7 +17,7 @@ namespace Oratio.Migrations.ApplicationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.12")
+                .HasAnnotation("ProductVersion", "6.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -55,7 +55,7 @@ namespace Oratio.Migrations.ApplicationDb
                         .IsUnique()
                         .HasFilter("[ChurchId] IS NOT NULL");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("Oratio.Models.Church", b =>
@@ -78,7 +78,7 @@ namespace Oratio.Migrations.ApplicationDb
 
                     b.HasIndex("ParishId");
 
-                    b.ToTable("Churches", (string)null);
+                    b.ToTable("Churches");
                 });
 
             modelBuilder.Entity("Oratio.Models.Intention", b =>
@@ -110,7 +110,7 @@ namespace Oratio.Migrations.ApplicationDb
 
                     b.HasIndex("MassId");
 
-                    b.ToTable("Intentions", (string)null);
+                    b.ToTable("Intentions");
                 });
 
             modelBuilder.Entity("Oratio.Models.Mass", b =>
@@ -132,7 +132,7 @@ namespace Oratio.Migrations.ApplicationDb
 
                     b.HasIndex("ChurchId");
 
-                    b.ToTable("Mass", (string)null);
+                    b.ToTable("Mass");
                 });
 
             modelBuilder.Entity("Oratio.Models.MassGenerationRule", b =>
@@ -159,20 +159,14 @@ namespace Oratio.Migrations.ApplicationDb
                     b.Property<DateTime?>("RuleTerminationTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TimesToRepeat")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TimespanToRepeat")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("WeekNumber")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("Time")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ParishId");
 
-                    b.ToTable("MassGenerationRules", (string)null);
+                    b.ToTable("MassGenerationRules");
                 });
 
             modelBuilder.Entity("Oratio.Models.Parish", b =>
@@ -197,7 +191,7 @@ namespace Oratio.Migrations.ApplicationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Parishes", (string)null);
+                    b.ToTable("Parishes");
                 });
 
             modelBuilder.Entity("Oratio.Models.Address", b =>
@@ -238,11 +232,9 @@ namespace Oratio.Migrations.ApplicationDb
 
             modelBuilder.Entity("Oratio.Models.MassGenerationRule", b =>
                 {
-                    b.HasOne("Oratio.Models.Parish", "Parish")
+                    b.HasOne("Oratio.Models.Parish", null)
                         .WithMany("MassGenerationRules")
                         .HasForeignKey("ParishId");
-
-                    b.Navigation("Parish");
                 });
 
             modelBuilder.Entity("Oratio.Models.Church", b =>

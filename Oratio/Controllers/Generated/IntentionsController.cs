@@ -30,7 +30,7 @@ namespace Oratio.Controllers.Generated
             {
                 var parishId = _currentUserRepository.getParishIdForLoggedUser();
                 var applicationDbContext = _context.Intentions
-                    .Where(intention => intention.Mass.Church.ParishId.ToString() == parishId)
+                   // .Where(intention => intention.Mass.Church.ParishId.ToString() == parishId)
                     .Include(intention => intention.Mass);
                 return View(await applicationDbContext.ToListAsync());
 
@@ -40,7 +40,7 @@ namespace Oratio.Controllers.Generated
                 var userId = _currentUserRepository.getCurrentUserId();
                 if (userId == null) return NotFound("Only accessible for users logged in");
                 var applicationDbContext = _context.Intentions
-                    .Where(i => i.OwnerId == userId)
+                   // .Where(i => i.OwnerId == userId)
                     .Include(i => i.Mass);
                 return View(await applicationDbContext.ToListAsync());
             }

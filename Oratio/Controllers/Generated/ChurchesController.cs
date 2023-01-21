@@ -81,7 +81,7 @@ namespace Oratio.Controllers.Generated
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,ParishId,Id,OwnerId,Address.StreetName")] Church church)
+        public async Task<IActionResult> Create([Bind("Name,ParishId,Id,OwnerId")] Church church)
         {
             if (!_currentUserRepository.isLoggedInAsParish()) return Unauthorized("Only parish administrator can perform this action.");
 

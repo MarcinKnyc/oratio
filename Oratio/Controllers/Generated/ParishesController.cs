@@ -99,7 +99,7 @@ namespace Oratio.Controllers.Generated
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Redirect("~/Identity/Account/Manage");
             }
             return View(parish);
         }

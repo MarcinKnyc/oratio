@@ -32,13 +32,14 @@ namespace Oratio.Controllers.Generated
             if (_currentUserRepository.isLoggedInAsParish() == true)
             {
                 var parishId = _currentUserRepository.getParishIdForLoggedUser();
-                var applicationDbContext = _context.Churches
-                    .Where(church => church.ParishId.ToString() == parishId);
+                var applicationDbContext = await _context.Churches
+                    .Where(church => church.ParishId.ToString() == parishId)
 
-                applicationDbContext
+               
                     .Include(church => church.Parish)
-                    .Include(church => church.Address);
-                return View(await applicationDbContext.ToListAsync());
+                    .Include(church => church.Address)
+                    .ToListAsync();
+                return View( applicationDbContext);
             }
 
             else

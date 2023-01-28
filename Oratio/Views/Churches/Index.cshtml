@@ -29,7 +29,10 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Address)
+              @if (item.Address != null)
+              {
+                        <text>@item.Address.StreetName @item.Address.StreetNumber, @item.Address.City @item.Address.ZipCode</text>
+              }
             </td>
 
             <td>

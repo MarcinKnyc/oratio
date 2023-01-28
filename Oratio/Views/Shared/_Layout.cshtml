@@ -24,18 +24,22 @@
                         @if (currentUserRepository.isLoggedIn() == true)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Intentions">Intentions</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Intentions" asp-action="Index">Intentions</a>
                             </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Masses">Masses</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Masses" asp-action="Index">Masses</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Churches">Churches</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Churches" asp-action="Index">Churches</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Parishes">Parishes</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Parishes" asp-action="Index">Parishes</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                        </li>
+
                         @if (currentUserRepository.isLoggedInAsModerator()==true)
                         {
                             <li class="nav-item">

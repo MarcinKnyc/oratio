@@ -28,7 +28,7 @@ namespace Oratio.Controllers.Generated
             ViewData["Date"] = "asdasdasda";
             if (!_currentUserRepository.isLoggedIn()) return NotFound("Only accessible for users logged in");
             if (_currentUserRepository.isLoggedInAsParish())
-            {
+            {                
                 var parishId = _currentUserRepository.getParishIdForLoggedUser();
                 var applicationDbContext = _context.Intentions
                     .Where(intention => intention.Mass.Church.ParishId.ToString() == parishId)
@@ -60,6 +60,33 @@ namespace Oratio.Controllers.Generated
             if (_currentUserRepository.isLoggedInAsParish()) return NotFound("Niedostępne dla administratorów parafii.");
             ViewData["MassId"] = getMassIdSelectItems();
             return View("/Views/Intentions/CreateManual.cshtml");
+        }
+
+        // GET: Intentions/CreateSpecificMass/6575765
+        public IActionResult CreateSpecificMass(Guid? massId)
+        {
+            if (!_currentUserRepository.isLoggedIn()) return NotFound("Niedostępne dla niezalogowanych.");
+            if (_currentUserRepository.isLoggedInAsParish()) return NotFound("Niedostępne dla administratorów parafii.");
+
+            Mass? mass = _context.Mass
+                .Include(m => m.Church)
+                .Include(m => m.Church.Address)
+                .FirstOrDefault(m => m.Id.ToString() == massId.ToString());
+            if (mass == null) return NotFound("Mass with given ID not found.");
+
+            var city =
+                mass.Church.Address == null ?
+                "" :
+                mass.Church.Address.City + ", ";
+            ViewData["MassId"] = massId;
+            ViewData["MassDescription"] = $"{city}{mass.Church.Name}, {mass.DateTime.ToShortDateString()} {mass.DateTime.ToShortTimeString()}";
+            var parishId = mass.Church.ParishId.ToString();
+            var parish = _context.Parishes
+                .FirstOrDefault(p => p.Id.ToString() == parishId);
+            ViewData["MinimalOffering"] =
+                parish
+                .MinimumOffering ?? 0;
+            return View("/Views/Intentions/CreateSpecificMass.cshtml");
         }
 
         // POST: Intentions/Create

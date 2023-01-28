@@ -18,10 +18,10 @@ namespace Oratio.Controllers.Generated
 
         private readonly CurrentUserRepository _currentUserRepository;
 
-        public ChurchesController(ApplicationDbContext context, CurrentUserRepository parishLinkRepository)
+        public ChurchesController(ApplicationDbContext context, CurrentUserRepository currentUserRepository)
         {
             _context = context;
-            _currentUserRepository = parishLinkRepository;
+            _currentUserRepository = currentUserRepository;
 
         }
 

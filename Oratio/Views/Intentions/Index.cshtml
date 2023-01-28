@@ -2,11 +2,11 @@
 @model IEnumerable<Oratio.Models.Intention>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "My intentions";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>My intentions</h1>
 @inject CurrentUserRepository currentUserRepository
 
 @if (currentUserRepository.isLoggedInAsFaithful())
@@ -33,9 +33,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Mass)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OwnerId)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -55,10 +52,7 @@
                 @Html.DisplayFor(modelItem => item.isApproved)
             </td>
             <td>
-                    @ViewBag.Date
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OwnerId)
+                    @ViewData["MassDescription" + item.Id.ToString()]
             </td>
         </tr>
 }

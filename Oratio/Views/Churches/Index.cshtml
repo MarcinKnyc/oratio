@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Oratio.Models.Church>
+﻿@using Oratio.Areas.Identity.Data
+@model IEnumerable<Oratio.Models.Church>
+@inject CurrentUserRepository currentUserRepository
 
 @{
     ViewData["Title"] = "Index";
@@ -7,9 +9,11 @@
 
 <h1>Index</h1>
 
+ @if (currentUserRepository.isLoggedInAsParish() == true) {
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+ }
 <table class="table">
     <thead>
         <tr>
@@ -31,11 +35,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Address)
             </td>
-
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            @if (currentUserRepository.isLoggedInAsParish() == true)
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
+            }
         </tr>
 }
     </tbody>

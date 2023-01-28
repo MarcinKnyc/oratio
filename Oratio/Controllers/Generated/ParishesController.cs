@@ -28,7 +28,7 @@ namespace Oratio.Controllers.Generated
         // GET: Parishes
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Parishes.ToListAsync());
+            return View(await _context.Parishes.ToListAsync());
         }
 
         // GET: Parishes/Edit/5
@@ -40,7 +40,9 @@ namespace Oratio.Controllers.Generated
             }
 
             var parish = await _context.Parishes.FindAsync(id);
-            if (parish == null)
+            if (parish == null || 
+                parish.OwnerId.ToString() != _currentUserRepository.getCurrentUserId().ToString()
+                )
             {
                 return NotFound();
             }
@@ -52,12 +54,14 @@ namespace Oratio.Controllers.Generated
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Dedicated,MinimumOffering,Id")] Parish parish)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Dedicated,MinimumOffering,Id, OwnerId")] Parish parish)
         {
             if (id != parish.Id)
             {
                 return NotFound();
             }
+            // care: i have found an easier way to do this (<input hidden asp-for=OwnerId>),
+            // but I don't wanna re-do this so i leave this here.
 
             Parish? parishDb = _context.Parishes.FirstOrDefault(p => p.Id == id);
             if (parishDb == null) { return NotFound("Parish with given Id not found in Db."); }

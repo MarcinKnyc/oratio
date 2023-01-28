@@ -25,6 +25,7 @@ namespace Oratio.Controllers.Generated
         // GET: Intentions
         public async Task<IActionResult> Index()
         {
+            ViewData["Date"] = "asdasdasda";
             if (!_currentUserRepository.isLoggedIn()) return NotFound("Only accessible for users logged in");
             if (_currentUserRepository.isLoggedInAsParish())
             {
@@ -55,6 +56,7 @@ namespace Oratio.Controllers.Generated
         // GET: Intentions/Create
         public IActionResult Create()
         {
+            if (!_currentUserRepository.isLoggedIn()) return NotFound("Niedostępne dla niezalogowanych.");
             if (_currentUserRepository.isLoggedInAsParish()) return NotFound("Niedostępne dla administratorów parafii.");
             ViewData["MassId"] = getMassIdSelectItems();
             return View("/Views/Intentions/CreateManual.cshtml");

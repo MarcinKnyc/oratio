@@ -122,6 +122,7 @@ namespace Oratio.Areas.Identity.Pages.Account
                 user.IsModerator = false;
                 user.IsFaithful = false;
                 user.IsAdministrator = true;
+                user.IsActive = false;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Oratio.Areas.Identity.Data;
 using Oratio.Data;
 using Oratio.Models;
 
@@ -13,10 +14,12 @@ namespace Oratio.Controllers.Generated
     public class MassGenerationRulesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private CurrentUserRepository _currentUserRepository;
 
-        public MassGenerationRulesController(ApplicationDbContext context)
+        public MassGenerationRulesController(ApplicationDbContext context, CurrentUserRepository currentUserRepository)
         {
             _context = context;
+            _currentUserRepository = currentUserRepository;
         }
 
         // GET: MassGenerationRules
@@ -57,8 +60,12 @@ namespace Oratio.Controllers.Generated
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ParishId,TimesToRepeat,TimespanToRepeat,RuleTerminationTime,DayOfWeek,WeekNumber,IsActive,RuleStartTime,Id,OwnerId")] MassGenerationRule massGenerationRule)
+        public async Task<IActionResult> Create([Bind("TimesToRepeat,TimespanToRepeat,RuleTerminationTime,DayOfWeek,WeekNumber,IsActive,RuleStartTime,Id")] MassGenerationRule massGenerationRule)
         {
+
+            massGenerationRule.OwnerId = _currentUserRepository.getCurrentUserId();
+            massGenerationRule.ParishId = new Guid(_currentUserRepository.getParishIdForLoggedUser());
+
             if (ModelState.IsValid)
             {
                 massGenerationRule.Id = Guid.NewGuid();

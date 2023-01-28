@@ -26,17 +26,14 @@ namespace Oratio.Controllers.Generated
         public async Task<IActionResult> Index()
         {
             // var applicationDbContext = _context.Addresses.Include(a => a.Church);
-
-            var parishId = _currentUserRepository.getParishIdForLoggedUser();
-
-         
+            if (!_currentUserRepository.isLoggedIn() || !_currentUserRepository.isLoggedInAsParish())
+                return Unauthorized("Only available for parishes.");
+            var parishId = _currentUserRepository.getParishIdForLoggedUser();         
 
             var applicationDbContext = _context.Addresses
                 .Include(address => address.Church)
                 .Include(address => address.Church.Parish)
                 .Where(address => address.Church.ParishId.ToString() == parishId);
-
-
            
             return View(await applicationDbContext.ToListAsync());
         }
@@ -44,7 +41,10 @@ namespace Oratio.Controllers.Generated
         // GET: Addresses/Create
         public IActionResult Create()
         {
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id");
+            if (!_currentUserRepository.isLoggedIn() || !_currentUserRepository.isLoggedInAsParish())
+                return Unauthorized("Only available for parishes.");
+
+            ViewData["ChurchId"] = getChurchIdSelectItems();
             return View();
         }
 
@@ -53,8 +53,13 @@ namespace Oratio.Controllers.Generated
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StreetName,StreetNumber,City,ZipCode,ChurchId,Id,OwnerId")] Address address)
+        public async Task<IActionResult> Create([Bind("StreetName,StreetNumber,City,ZipCode,ChurchId,Id")] Address address)
         {
+            if (!_currentUserRepository.isLoggedIn() || !_currentUserRepository.isLoggedInAsParish())
+                return Unauthorized("Only available for parishes.");
+
+            address.OwnerId = _currentUserRepository.getCurrentUserId();
+
             if (ModelState.IsValid)
             {
                 address.Id = Guid.NewGuid();
@@ -63,15 +68,16 @@ namespace Oratio.Controllers.Generated
 
                 return RedirectToAction(nameof(Index));
             }
-            
 
-
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id", address.ChurchId);
+            ViewData["ChurchId"] = getChurchIdSelectItems();
             return View(address);
         }
         // GET: Addresses/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
+            if (!_currentUserRepository.isLoggedIn() || !_currentUserRepository.isLoggedInAsParish())
+                return Unauthorized("Only available for parishes.");
+
             if (id == null || _context.Addresses == null)
             {
                 return NotFound();
@@ -82,7 +88,7 @@ namespace Oratio.Controllers.Generated
             {
                 return NotFound();
             }
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id", address.ChurchId);
+            ViewData["ChurchId"] = getChurchIdSelectItems();
             return View(address);
         }
 
@@ -93,6 +99,9 @@ namespace Oratio.Controllers.Generated
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("StreetName,StreetNumber,City,ZipCode,ChurchId,Id,OwnerId")] Address address)
         {
+            if (!_currentUserRepository.isLoggedIn() || !_currentUserRepository.isLoggedInAsParish())
+                return Unauthorized("Only available for parishes.");
+
             if (id != address.Id)
             {
                 return NotFound();
@@ -118,7 +127,7 @@ namespace Oratio.Controllers.Generated
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ChurchId"] = new SelectList(_context.Churches, "Id", "Id", address.ChurchId);
+            ViewData["ChurchId"] = getChurchIdSelectItems();
             return View(address);
         }
 
@@ -158,6 +167,18 @@ namespace Oratio.Controllers.Generated
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private List<SelectListItem> getChurchIdSelectItems()
+        {
+            return _context.Churches
+                .Include(c => c.Address)
+                .Where(c => c.ParishId.ToString() == _currentUserRepository.getParishIdForLoggedUser())
+                .Select(c => new SelectListItem(
+                $"{c.Address.City}, {c.Name}",
+                c.Id.ToString()
+            ))
+                .ToList();
         }
 
         private bool AddressExists(Guid id)

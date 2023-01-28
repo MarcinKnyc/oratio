@@ -22,7 +22,9 @@ namespace Oratio.Controllers.Generated
         // GET: Masses
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Mass.Include(m => m.Church);
+            var applicationDbContext = _context.Mass
+                .Include(m => m.Church)
+                .Include(m => m.Intentions);
             return View(await applicationDbContext.ToListAsync());
         }
 

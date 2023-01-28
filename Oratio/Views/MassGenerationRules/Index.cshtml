@@ -14,25 +14,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Parish)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TimesToRepeat)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TimespanToRepeat)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.RuleTerminationTime)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DayOfWeek)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.WeekNumber)
+                @Html.DisplayNameFor(model => model.IsActive)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsActive)
+                @Html.DisplayNameFor(model => model.Time)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.RuleStartTime)
@@ -47,25 +38,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Parish.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimesToRepeat)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimespanToRepeat)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.RuleTerminationTime)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DayOfWeek)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.WeekNumber)
+                @Html.DisplayFor(modelItem => item.IsActive)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
+                @Html.DisplayFor(modelItem => item.Time)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.RuleStartTime)
@@ -76,7 +58,8 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                <a asp-action="CreateMasses" asp-route-id="@item.Id">Add masses</a>
             </td>
         </tr>
 }

@@ -93,6 +93,7 @@ namespace Oratio.Controllers.Generated
                         mass.Id = Guid.NewGuid();
                         mass.OwnerId = _currentUserRepository.getCurrentUserId();
                         mass.DateTime = new DateTime(ruleStartTime.Year, ruleStartTime.Month, ruleStartTime.Day, massGenerationRule.Time.Value.Hour, massGenerationRule.Time.Value.Minute, massGenerationRule.Time.Value.Second);
+                        mass.Church = _currentUserRepository.getChurchForLoggedUser();
                         _context.Add(mass);
                         await _context.SaveChangesAsync();
                     }

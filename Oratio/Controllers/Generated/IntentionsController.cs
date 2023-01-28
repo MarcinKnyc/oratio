@@ -25,7 +25,7 @@ namespace Oratio.Controllers.Generated
         // GET: Intentions
         public async Task<IActionResult> Index()
         {
-            ViewData["Date"] = "asdasdasda";
+            ViewData["Mass"] = "rest";
             if (!_currentUserRepository.isLoggedIn()) return NotFound("Only accessible for users logged in");
             if (_currentUserRepository.isLoggedInAsParish())
             {

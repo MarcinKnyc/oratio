@@ -83,5 +83,14 @@ namespace Oratio.Areas.Identity.Data
             var parish = _context.Parishes.FirstOrDefault(parish => parish.OwnerId.ToString() == userId);
             return parish;
         }
+
+        public Church? getChurchForLoggedUser()
+        {
+            if (!isLoggedIn() || !isLoggedInAsParish()) return null;
+
+            var userId = getCurrentUserId().ToString(); //if current user id not found, returns ""
+            var church = _context.Churches.FirstOrDefault(church => church.OwnerId.ToString() == userId);
+            return church;
+        }
     }
 }

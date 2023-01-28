@@ -56,7 +56,7 @@ namespace Oratio.Controllers.Generated
         public IActionResult Create()
         {
             if (_currentUserRepository.isLoggedInAsParish()) return NotFound("Niedostępne dla administratorów parafii.");
-            ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id");
+            ViewData["MassId"] = getMassIdSelectItems();
             return View("/Views/Intentions/CreateManual.cshtml");
         }
 
@@ -71,21 +71,30 @@ namespace Oratio.Controllers.Generated
             Mass? mass = _context.Mass.Include(massses => massses.Church).FirstOrDefault(massses => massses.Id == intention.MassId);
             if (userId == null || _currentUserRepository.isLoggedInAsParish() || mass == null || mass.Church == null) 
             {
-                ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id", intention.MassId);
-                return View(intention);
+                ViewData["MassId"] = getMassIdSelectItems();
+                return View("/Views/Intentions/CreateManual.cshtml", intention);
             }
             Parish? parishInDb = _context.Parishes.FirstOrDefault(parish => parish.Id == mass.Church.ParishId);
             float? minimalOffering = parishInDb != null ? parishInDb.MinimumOffering : null;
             if (!intention.ValidateOfferingAmount((int?)minimalOffering) || !ModelState.IsValid)
             {
-                ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id", intention.MassId);
-                return View(intention);
+                ViewData["MassId"] = getMassIdSelectItems();
+                return View("/Views/Intentions/CreateManual.cshtml", intention);
             }
             intention.OwnerId = userId;        
             intention.Id = Guid.NewGuid();
             _context.Add(intention);
             await _context.SaveChangesAsync();
             return RedirectToAction("Confirm", new { intention.Id });
+        }
+
+        private List<SelectListItem> getMassIdSelectItems()
+        {
+            return _context.Mass.Select(m => new SelectListItem(
+                $"{m.Church.Address.City}, {m.Church.Name}, {m.DateTime.ToShortDateString()} {m.DateTime.ToShortTimeString()}",
+                m.Id.ToString()
+            ))
+                .ToList();
         }
 
         private bool IntentionExists(Guid id)

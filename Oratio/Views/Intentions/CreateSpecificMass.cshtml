@@ -1,0 +1,44 @@
+﻿@model Oratio.Models.Intention
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Intention</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label for="MassId" class="control-label">Id mszy:    @ViewBag.MassDescription</label>
+                <input asp-for="MassId" class="form-control" value="@ViewBag.MassId" />
+                <span asp-validation-for="MassId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AskedIntention" class="control-label"></label>
+                <input asp-for="AskedIntention" class="form-control" />
+                <span asp-validation-for="AskedIntention" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Offering" class="control-label">Offering - min. @ViewBag.MinimalOffering PLN</label>
+                <input asp-for="Offering" class="form-control" />
+                <span asp-validation-for="Offering" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

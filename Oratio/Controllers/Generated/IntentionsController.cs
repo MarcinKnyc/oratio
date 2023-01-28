@@ -25,9 +25,10 @@ namespace Oratio.Controllers.Generated
         // GET: Intentions
         public async Task<IActionResult> Index()
         {
+            ViewData["Date"] = "asdasdasda";
             if (!_currentUserRepository.isLoggedIn()) return NotFound("Only accessible for users logged in");
             if (_currentUserRepository.isLoggedInAsParish())
-            {
+            {                
                 var parishId = _currentUserRepository.getParishIdForLoggedUser();
                 var applicationDbContext = _context.Intentions
                     .Where(intention => intention.Mass.Church.ParishId.ToString() == parishId)
@@ -55,9 +56,37 @@ namespace Oratio.Controllers.Generated
         // GET: Intentions/Create
         public IActionResult Create()
         {
+            if (!_currentUserRepository.isLoggedIn()) return NotFound("Niedostępne dla niezalogowanych.");
             if (_currentUserRepository.isLoggedInAsParish()) return NotFound("Niedostępne dla administratorów parafii.");
-            ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id");
+            ViewData["MassId"] = getMassIdSelectItems();
             return View("/Views/Intentions/CreateManual.cshtml");
+        }
+
+        // GET: Intentions/CreateSpecificMass/6575765
+        public IActionResult CreateSpecificMass(Guid? massId)
+        {
+            if (!_currentUserRepository.isLoggedIn()) return NotFound("Niedostępne dla niezalogowanych.");
+            if (_currentUserRepository.isLoggedInAsParish()) return NotFound("Niedostępne dla administratorów parafii.");
+
+            Mass? mass = _context.Mass
+                .Include(m => m.Church)
+                .Include(m => m.Church.Address)
+                .FirstOrDefault(m => m.Id.ToString() == massId.ToString());
+            if (mass == null) return NotFound("Mass with given ID not found.");
+
+            var city =
+                mass.Church.Address == null ?
+                "" :
+                mass.Church.Address.City + ", ";
+            ViewData["MassId"] = massId;
+            ViewData["MassDescription"] = $"{city}{mass.Church.Name}, {mass.DateTime.ToShortDateString()} {mass.DateTime.ToShortTimeString()}";
+            var parishId = mass.Church.ParishId.ToString();
+            var parish = _context.Parishes
+                .FirstOrDefault(p => p.Id.ToString() == parishId);
+            ViewData["MinimalOffering"] =
+                parish
+                .MinimumOffering ?? 0;
+            return View("/Views/Intentions/CreateSpecificMass.cshtml");
         }
 
         // POST: Intentions/Create
@@ -71,21 +100,30 @@ namespace Oratio.Controllers.Generated
             Mass? mass = _context.Mass.Include(massses => massses.Church).FirstOrDefault(massses => massses.Id == intention.MassId);
             if (userId == null || _currentUserRepository.isLoggedInAsParish() || mass == null || mass.Church == null) 
             {
-                ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id", intention.MassId);
-                return View(intention);
+                ViewData["MassId"] = getMassIdSelectItems();
+                return View("/Views/Intentions/CreateManual.cshtml", intention);
             }
             Parish? parishInDb = _context.Parishes.FirstOrDefault(parish => parish.Id == mass.Church.ParishId);
             float? minimalOffering = parishInDb != null ? parishInDb.MinimumOffering : null;
             if (!intention.ValidateOfferingAmount((int?)minimalOffering) || !ModelState.IsValid)
             {
-                ViewData["MassId"] = new SelectList(_context.Mass, "Id", "Id", intention.MassId);
-                return View(intention);
+                ViewData["MassId"] = getMassIdSelectItems();
+                return View("/Views/Intentions/CreateManual.cshtml", intention);
             }
             intention.OwnerId = userId;        
             intention.Id = Guid.NewGuid();
             _context.Add(intention);
             await _context.SaveChangesAsync();
             return RedirectToAction("Confirm", new { intention.Id });
+        }
+
+        private List<SelectListItem> getMassIdSelectItems()
+        {
+            return _context.Mass.Select(m => new SelectListItem(
+                $"{m.Church.Address.City}, {m.Church.Name}, {m.DateTime.ToShortDateString()} {m.DateTime.ToShortTimeString()}",
+                m.Id.ToString()
+            ))
+                .ToList();
         }
 
         private bool IntentionExists(Guid id)

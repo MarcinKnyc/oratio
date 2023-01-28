@@ -50,7 +50,7 @@
                 @Html.DisplayFor(modelItem => item.isApproved)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Mass.Id)
+                    @ViewBag.Date
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OwnerId)
@@ -58,7 +58,13 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                @*Krzysiek please make it available only for parish administrators*@
+
+                @if (! item.isApproved)
+                {
+                    <a asp-action="Approve" asp-route-id="@item.Id">Approve</a>
+                }                
             </td>
         </tr>
 }

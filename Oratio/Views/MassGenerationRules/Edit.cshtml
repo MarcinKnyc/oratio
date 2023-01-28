@@ -14,21 +14,6 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ParishId" class="control-label"></label>
-                <select asp-for="ParishId" class="form-control" asp-items="ViewBag.ParishId"></select>
-                <span asp-validation-for="ParishId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TimesToRepeat" class="control-label"></label>
-                <input asp-for="TimesToRepeat" class="form-control" />
-                <span asp-validation-for="TimesToRepeat" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TimespanToRepeat" class="control-label"></label>
-                <input asp-for="TimespanToRepeat" class="form-control" />
-                <span asp-validation-for="TimespanToRepeat" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="RuleTerminationTime" class="control-label"></label>
                 <input asp-for="RuleTerminationTime" class="form-control" />
                 <span asp-validation-for="RuleTerminationTime" class="text-danger"></span>
@@ -38,15 +23,15 @@
                 <input asp-for="DayOfWeek" class="form-control" />
                 <span asp-validation-for="DayOfWeek" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="WeekNumber" class="control-label"></label>
-                <input asp-for="WeekNumber" class="form-control" />
-                <span asp-validation-for="WeekNumber" class="text-danger"></span>
-            </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
                 </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Time" class="control-label"></label>
+                <input asp-for="Time" class="form-control" />
+                <span asp-validation-for="Time" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="RuleStartTime" class="control-label"></label>
@@ -54,11 +39,7 @@
                 <span asp-validation-for="RuleStartTime" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="OwnerId" class="control-label"></label>
-                <input asp-for="OwnerId" class="form-control" />
-                <span asp-validation-for="OwnerId" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="OwnerId" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

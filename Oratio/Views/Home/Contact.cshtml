@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Contact with administrators";
+}
+
+<style>
+
+/* Style inputs */
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=button] {
+  background-color: #0D6EFD;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+input[type=button]:hover {
+            background-color: #6610f2
+}
+
+/* Style the container/contact section */
+.main {
+  border-radius: 5px;
+  padding: 10px;
+}
+
+/* Create two columns that float next to eachother */
+.column {
+  float: left;
+  width: 50%;
+  margin-top: 6px;
+  padding: 20px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+</style>
+
+<div class="main" id="main">
+    <div style="text-align:center">
+        <h2>Contact Us</h2>
+        <p>Any questions? Leave us a message:</p>
+    </div>
+    <div class="row">
+        <div class="column">
+            <p>Krasińskiego 8, 40-019 Katowice</p>
+            <p>☏ +48 997 997 997</p>
+            <p>✉ oratio@gmail.com</p>
+        </div>
+        <div class="column">
+                <label for="fname">First Name</label>
+                <input type="text" id="fname" name="firstname" placeholder="Your name..">
+                <label for="lname">Last Name</label>
+                <input type="text" id="lname" name="lastname" placeholder="Your last name..">
+                <label for="subject">Subject</label>
+                <textarea id="subject" name="subject" placeholder="Write something.." style="height:170px"></textarea>
+                <input type="button" value="Send" id="button">
+        </div>
+    </div>
+</div>
+
+<script>
+    button.addEventListener('click', function() {
+        document.getElementById("main").innerHTML = "<h1><center>Thank you for contacting us!</center></h1>"
+    })
+
+</script>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Oratio.Areas.Identity.Data;
 using Oratio.Data;
 
 namespace Oratio.Controllers
@@ -6,10 +7,12 @@ namespace Oratio.Controllers
     public class IntentionsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private CurrentUserRepository _currentUserRepository;
 
-        public IntentionsController(ApplicationDbContext context)
+        public IntentionsController(ApplicationDbContext context, CurrentUserRepository currentUserRepository)
         {
             _context = context;
+            _currentUserRepository = currentUserRepository;
         }
 
         // GET: Intentions/Confirm
@@ -30,6 +33,24 @@ namespace Oratio.Controllers
                 intention.isPaid = true;
             }
 
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        //Path: Masses/Approve/askjd-ajshdakjjjjjjjjjjjjjjjjj-asd
+        public async Task<IActionResult> Approve(Guid id)
+        {
+            if (! _currentUserRepository.isLoggedIn() || !_currentUserRepository.isLoggedInAsParish())
+            {
+                return Unauthorized("Only accessible for parishes.");
+            }
+            var intention = await _context.Intentions.FindAsync(id);
+            if (intention == null)
+            {
+                return NotFound("Intention with given id not found");
+            }
+
+            intention.isApproved = true;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

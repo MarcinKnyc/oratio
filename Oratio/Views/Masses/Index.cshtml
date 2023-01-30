@@ -1,16 +1,20 @@
-﻿@model IEnumerable<Oratio.Models.Mass>
+﻿@using Oratio.Areas.Identity.Data
+@model IEnumerable<Oratio.Models.Mass>
+@inject CurrentUserRepository currentUserRepository
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Masses";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Masses</h1>
 
+ @if (currentUserRepository.isLoggedInAsParish() == true) {
 <p>
     <a asp-action="Create">Create New</a>
     <a asp-controller="MassGenerationRules" asp-action="Index">Manage Generation Rule</a>
 </p>
+ }
 <table class="table">
     <thead>
         <tr>
@@ -21,10 +25,10 @@
                 @Html.DisplayNameFor(model => model.Church)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OwnerId)
+                @Html.DisplayNameFor(model => model.Intentions)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Intentions)
+                Is approved
             </th>
             <th></th>
         </tr>
@@ -36,25 +40,31 @@
                 @Html.DisplayFor(modelItem => item.DateTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Church.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OwnerId)
+                    @ViewData["ChurchDescription" + item.Id.ToString()]
             </td>
             <td>
             @foreach(var intentionItem in item.Intentions) {
 
                @Html.DisplayFor(modelItem => intentionItem.AskedIntention)
-               @Html.DisplayFor(modelItem => intentionItem.isApproved)
                         <br />
             }
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                @*Krzysiek, please only display this for logged in as faithful:*@
-                <a asp-controller="Intentions" asp-action="CreateSpecificMass" asp-route-massId="@item.Id">Order prayer intention</a>
+            @foreach (var intentionItem in item.Intentions)
+            {
+                @Html.DisplayFor(modelItem => intentionItem.isApproved)
+                <br />
+             }
+             </td>
+            <td>
+            @if (currentUserRepository.isLoggedInAsParish() == true)
+                 {
+                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                 }
+             @if (currentUserRepository.isLoggedInAsFaithful() == true)
+                 {
+                  <a asp-controller="Intentions" asp-action="CreateSpecificMass" asp-route-massId="@item.Id">Order prayer intention</a>
+                 }
             </td>
         </tr>
 }

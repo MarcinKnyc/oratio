@@ -25,12 +25,28 @@ namespace Oratio.Controllers.Generated
         // GET: Masses
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Mass
+            if (!_currentUserRepository.isLoggedIn()) return NotFound("Only accessible for users logged in");
+            if (_currentUserRepository.isLoggedInAsParish())
+            {
+                var parishId = _currentUserRepository.getParishIdForLoggedUser();
+                var applicationDbContext = await _context.Mass
+                    .Where(mass => mass.Church.ParishId.ToString() == parishId)
                 .Include(m => m.Church)
-                .Include(m => m.Intentions);
-            return View(await applicationDbContext.ToListAsync());
+                .Include(m => m.Intentions)
+                .Include(m => m.Church.Address).ToListAsync();
+                AddChurchDescriptionToViewBag(applicationDbContext);
+                return View(applicationDbContext);
+            }
+            else
+            {
+                var applicationDbContext = await _context.Mass
+                  .Include(m => m.Church)
+                  .Include(m => m.Intentions)
+                  .Include(m => m.Church.Address).ToListAsync();
+                AddChurchDescriptionToViewBag(applicationDbContext);
+                return View(applicationDbContext);
+            }
         }
-
         // GET: Masses/Create
         public IActionResult Create()
         {
@@ -175,6 +191,18 @@ namespace Oratio.Controllers.Generated
                 c.Id.ToString()
             ))
                 .ToList();
+        }
+
+        private void AddChurchDescriptionToViewBag(List<Mass> filteredChurchListWithIncludesInMain)
+        {
+            foreach (var mass in filteredChurchListWithIncludesInMain)
+            {
+              if(mass.Church != null)
+                {
+                    var city = mass.Church.Address == null ? "" : mass.Church.Address.City + ", ";
+                    ViewData["ChurchDescription" + mass.Id.ToString()] = $"{city}{mass.Church.Name}";
+                }
+            }
         }
 
         private bool MassExists(Guid id)

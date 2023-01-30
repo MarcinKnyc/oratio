@@ -25,25 +25,32 @@ namespace Oratio.Controllers.Generated
         // GET: Intentions
         public async Task<IActionResult> Index()
         {
-            ViewData["Date"] = "asdasdasda";
             if (!_currentUserRepository.isLoggedIn()) return NotFound("Only accessible for users logged in");
             if (_currentUserRepository.isLoggedInAsParish())
             {                
                 var parishId = _currentUserRepository.getParishIdForLoggedUser();
-                var applicationDbContext = _context.Intentions
+                var applicationDbContext = await _context.Intentions
                     .Where(intention => intention.Mass.Church.ParishId.ToString() == parishId)
-                    .Include(intention => intention.Mass);
-                return View(await applicationDbContext.ToListAsync());
+                    .Include(intention => intention.Mass)
+                    .Include(i => i.Mass.Church)
+                    .Include(i => i.Mass.Church.Address)
+                    .ToListAsync();
+                AddMassDescriptionToViewBag(applicationDbContext);
+                return View(applicationDbContext);
 
             }
             else if (_currentUserRepository.isLoggedInAsFaithful())
             {
                 var userId = _currentUserRepository.getCurrentUserId();
                 if (userId == null) return NotFound("Only accessible for users logged in");
-                var applicationDbContext = _context.Intentions
+                var applicationDbContext = await _context.Intentions
                     .Where(i => i.OwnerId == userId)
-                    .Include(i => i.Mass);
-                return View(await applicationDbContext.ToListAsync());
+                    .Include(i => i.Mass)
+                    .Include(i => i.Mass.Church)
+                    .Include(i => i.Mass.Church.Address)
+                    .ToListAsync();
+                AddMassDescriptionToViewBag(applicationDbContext);
+                return View(applicationDbContext);
             }
             else //loggedInAsModerator
             {
@@ -124,6 +131,18 @@ namespace Oratio.Controllers.Generated
                 m.Id.ToString()
             ))
                 .ToList();
+        }
+
+        private void AddMassDescriptionToViewBag(List<Intention> filteredIntentionListWithIncludesInMain)
+        {
+
+            foreach (var intention in filteredIntentionListWithIncludesInMain) {
+                var city =
+        intention.Mass.Church.Address == null ?
+        "" :
+         intention.Mass.Church.Address.City + ", ";
+                ViewData["MassDescription" + intention.Id] = $"{city}{intention.Mass.Church.Name}, {intention.Mass.DateTime.ToShortDateString()} {intention.Mass.DateTime.ToShortTimeString()}";
+            }
         }
 
         private bool IntentionExists(Guid id)

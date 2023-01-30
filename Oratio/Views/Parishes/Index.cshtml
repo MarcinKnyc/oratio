@@ -1,15 +1,14 @@
-﻿@model IEnumerable<Oratio.Models.Parish>
+﻿@using Oratio.Areas.Identity.Data
+@model IEnumerable<Oratio.Models.Parish>
+@inject CurrentUserRepository currentUserRepository
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Parishes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Parishes</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -21,9 +20,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.MinimumOffering)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OwnerId)
             </th>
             <th></th>
         </tr>
@@ -40,14 +36,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.MinimumOffering)
             </td>
+           @if (currentUserRepository.isLoggedInAsParish() == true)
+           {
             <td>
-                @Html.DisplayFor(modelItem => item.OwnerId)
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+            }
         </tr>
 }
     </tbody>

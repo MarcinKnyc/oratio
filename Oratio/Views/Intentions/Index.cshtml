@@ -1,15 +1,20 @@
-﻿@model IEnumerable<Oratio.Models.Intention>
+﻿@using Oratio.Areas.Identity.Data
+@model IEnumerable<Oratio.Models.Intention>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "My intentions";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>My intentions</h1>
+@inject CurrentUserRepository currentUserRepository
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (currentUserRepository.isLoggedInAsFaithful())
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -27,9 +32,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Mass)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OwnerId)
             </th>
             <th></th>
         </tr>
